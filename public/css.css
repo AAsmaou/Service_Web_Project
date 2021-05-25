@@ -1,0 +1,365 @@
+/*scrollbar style */
+:root{
+	scrollbar-color: #395761 #2E3645 !important;
+	scrollbar-width: thin !important;
+}
+
+* {
+	scrollbar-width: thin !important;
+}
+/*end scrollbar style */
+
+/*EDITTABLE PAGE*/
+.btn_edit_album{
+  background-color: transparent;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #3E4042;
+  width: 50px;
+  height: 50px;
+  vertical-align: top;
+  text-align: center;
+  color:white;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.row2{
+    text-align: center;
+    padding-bottom:17px;
+}
+
+input{
+    color:white;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.margin-right{
+  margin-right: 9px;
+}
+
+
+*, ::after, ::before {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+body{
+  background-color: #18191a;
+  font-family: circular;
+  font-weight: 300;
+  font-size: 18px;
+  color: #c0c0c0;
+}
+@font-face {
+	font-family: Circular;
+	src: url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-light.woff2) format("woff2"), url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-light.woff) format("woff");
+	font-weight: 300;
+	font-style: normal
+}
+
+@font-face {
+	font-family: Circular;
+	src: url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-book.woff2) format("woff2"), url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-book.woff) format("woff");
+	font-weight: 400;
+	font-style: normal
+}
+
+@font-face {
+	font-family: Circular;
+	src: url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-medium.woff2) format("woff2"), url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-medium.woff) format("woff");
+	font-weight: 500;
+	font-style: normal
+}
+
+@font-face {
+	font-family: Circular;
+	src: url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-bold.woff2) format("woff2"), url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-bold.woff) format("woff");
+	font-weight: 700;
+	font-style: normal
+}
+
+@font-face {
+	font-family: Circular;
+	src: url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-black.woff2) format("woff2"), url(https://sp-bootstrap.global.ssl.fastly.net/8.7.0/fonts/circular-black.woff) format("woff");
+	font-weight: 900;
+	font-style: normal
+}
+
+/* HEADER */
+.header.default {
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 1040;
+}
+
+.header {
+	padding: .4em 0;
+	display: block;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	text-decoration: none;
+}
+
+.header .left-part {
+	float: left;
+	margin-left: 3.125rem;
+}
+
+.header .logo {
+	display: inline-block;
+}
+
+.header .logo h1 {
+	color: #c0c0c0;
+	font-size: 30px;
+	font-weight: 600;
+}
+
+.uppercase {
+	text-transform: uppercase;
+}
+
+body h1{
+    margin: 0;
+    padding: 0;
+}
+
+.mb-0, .my-0 {
+	margin-bottom: 0;
+}
+
+h1, .h1 {
+	font-size: 2.5rem;
+	line-height: 3rem;
+	letter-spacing: 5px;
+	font-family: "Montserrat", Helvetica, Arial, sans-serif;
+	margin-bottom: .5rem;
+	font-weight: 400;
+	position: relative;
+	color: #c0c0c0;
+}
+
+.header .right-part {
+	float: right;
+	margin-right: 3.125rem;
+	position: relative;
+}
+
+.list-inline {
+	padding-left: 0;
+	list-style: none;
+}
+
+.main-nav li {
+	display: inline-block;
+	font-size: 1.1rem;
+	font-weight: 500;
+	text-transform: uppercase;
+	margin-left: 1.9625rem;
+	font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+}
+
+.header a,
+.header.switched-header a {
+  color: #c0c0c0;
+  text-decoration: none;
+}
+
+/* red user-icon */
+.main-nav ul li i {
+    color: #ff5252;
+}
+
+.header.switched-header {
+		background-color: #ffffff;
+		left: 0;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		z-index: 1040;
+}
+
+.header.switched-header .logo h1{
+		color: #222222;
+}
+
+.header.switched-header .main-nav li a {
+     color: #949494;
+}
+
+.header.switched-header a {
+  color: black;
+  text-decoration: none;
+}
+
+/*END HEADER*/
+
+/* START BODY */
+.container_info{
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  width: 55%;
+  background-color: #242526;
+  border-radius: 10px;
+  margin-bottom: 100px;
+}
+
+.sectionTitle {
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 6%;
+}
+
+.sectionTitle h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: #ffffff;
+}
+
+.sectionTitle span.heading-b3 {
+  display: block;
+  height: 1px;
+  width: 70px;
+  margin: 0 auto;
+  background-color: #a1a3a6;
+  position: relative;
+}
+
+.paddingBottom {
+  padding-bottom: 4rem;
+}
+
+.pad-left{
+  padding-left: 20px;
+}
+
+.pad-right{
+  padding-right: 40px;
+}
+
+.pad-right-sm{
+  padding-right: 10px;
+}
+
+.btn{
+  background-color: transparent;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #3E4042;
+  width: 35px;
+  height: 35px;
+  vertical-align: top;
+  text-align: center;
+  color:white;
+  cursor: pointer;
+}
+
+.btn:hover{
+  border-color: #8A8D91;
+}
+
+input{
+  background-color: transparent;
+  border-radius: 6px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #3E4042;
+  cursor:text;
+  height: 35px
+}
+input:hover, input:active{
+  border-color: #8A8D91
+}
+
+input:focus{
+  outline: none;
+  background-color: #8A8D91;
+}
+
+.row{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.margin-top{
+  margin-top: 8px;
+}
+
+.green{
+  color: green;
+}
+
+.red{
+  color: red;
+}
+
+.long{
+  width: 200px;
+}
+.medium{
+  width: 150px;
+}
+
+.short{
+  width: 100px;
+}
+
+/*https://www.w3schools.com/howto/howto_css_custom_checkbox.asp*/
+input.check{
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: rgb(161, 163, 166);
+}
+
+.no-pad-bottom{
+  padding-bottom:0;
+}
+
+.no-pad-top{
+  padding-top:0;
+}
+
+.heading-b3 {
+  display: block;
+  height: 1px;
+  width: 800px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background-color: rgb(161, 163, 166,0.2);
+  position: relative;
+}
+
+a{
+  cursor: pointer;
+}
+
+a:hover{
+  color: #8A8D91;
+}
+
+.email_confirm{
+  display: none;
+}
+/* END BODY */
+

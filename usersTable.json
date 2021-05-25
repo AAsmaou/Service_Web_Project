@@ -1,0 +1,17 @@
+db.users.insertMany([
+  {
+    "Id": 1,
+    "username": "user1",
+    "psw": "user1"
+  },
+  {
+    "Id": 2,
+    "username": "user2",
+    "psw": "user2"
+  },
+  {
+    "Id": 3  ,
+    "username": "user3", 
+    "psw": "user3"
+  }
+])
