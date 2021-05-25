@@ -1,0 +1,19 @@
+{
+  "name": "service_web_project",
+  "version": "1.0.0",
+  "description": "develop a chatbot with NodeJS and REST API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AAsmaou/Service_Web_Project.git"
+  },
+  "author": "Asmaou and Francesco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AAsmaou/Service_Web_Project/issues"
+  },
+  "homepage": "https://github.com/AAsmaou/Service_Web_Project#readme"
+}
