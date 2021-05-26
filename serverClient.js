@@ -43,7 +43,7 @@ app.post('/', function (req, res) {
 
   // redirect users to web service
   if (result) {
-    res.render('temp', {data: User});
+    res.render('chat', {data: User});
   }
 })
 
