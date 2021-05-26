@@ -3,27 +3,44 @@
 <head>
 <!-- Metas -->
 <meta charset="utf-8">
-<title>Formulaire</title>
+<title>ChatBot</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Css -->
 <link rel='stylesheet' href='chatbox.css' />
+<script type="text/javascript">
+	// Using jQuery.
+	
+	$(function() {
+		$('form').each(function() {
+			$(this).find('input').keypress(function(e) {
+				// Enter pressed?
+				if(e.which == 10 || e.which == 13) {
+					this.form.submit();
+				}
+			});
+		});
+	});
+	</script>
 </head>
 
-<body>
+<body>	
+
 	<div class="modal-dialog center">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="chatModalLabel">Dialogue</h4>
 			</div>
 			<div class="modal-body">
-				<div class="try-dialogue" id="dialogue"></div>
+				<div class="try-dialogue" id="dialogue">
 
-				<fieldset>
+				</div>
+
 					<legend>Send a Message</legend>
-					<input type="text" class="form-control" id="message" placeholder="Press Enter to send">
-				</fieldset>
+					<form method="post">
+						<input type="text" class="form-control" name="message" value="" placeholder="Press Enter to send">
+					</form>
 			</div>
 			<div class="modal-footer">
 				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
@@ -31,4 +48,5 @@
 		</div>
 	</div>
 </body>
+
 </html>
