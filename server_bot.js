@@ -16,9 +16,15 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 var User = [];
 
 
-app.get('/', (req, res) => {
-  // nothing
-})
+var RiveScript = require("rivescript");
+var bot = new RiveScript();
+
+bot.loadDirectory("brain");
+
+app.use(express.static('assets'));
+
+app.get('/', function (req, res) {
+});
 
 
 app.post('/', function (req, res) {

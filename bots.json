@@ -1,0 +1,14 @@
+bots([
+    {
+      "name": "Steve"
+    },
+    {
+      "name": "Alice"
+    },
+    {
+      "name": "Bob"
+    },
+    {
+      "name": "Bill"
+    }
+  ])
