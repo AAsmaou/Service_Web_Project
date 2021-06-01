@@ -202,7 +202,7 @@ $(function() {
   $( window ).load(function() {
     connected = true;
     // Display the welcome message
-    const message = 'Welcome in the ChatRoom ';
+    const message = 'Welcome to the ChatRoom ';
     log(message, {
       prepend: true
     });
