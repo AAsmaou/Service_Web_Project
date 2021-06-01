@@ -12,7 +12,7 @@ let userName = '';
 appBot.get('/chatbot', (req, res) => {
   userName = req.query.user;
   if (typeof userName == 'undefined'){
-    res.redirect('http://localhost:3000');
+    res.redirect('http://localhost:3000'); //redirect to the login page
     console.log('Cannot access without loging in first')
   }
   else {

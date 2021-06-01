@@ -45,8 +45,8 @@ app.post('/', function (req, res) {
   if (result) {
     //res.render('chat', {data: User});
     // PASS USERNAME
-    var string = encodeURIComponent(nickname);
-    res.redirect('http://localhost:3002/chatbot'+'?user=' + string);
+    var user = encodeURIComponent(nickname);
+    res.redirect('http://localhost:3002/chatbot'+'?user=' + user);
   }
 })
 
