@@ -2,9 +2,31 @@
 //##### UTILITY FOR MONGODB DATABASE #####
 //########################################
 
+
+// INSERT a bot into activeBots
+async function MarkBotAsRunning(client, newListing){
+
+  const result = await client.db("test").collection("activeBots").insertOne(newListing);
+
+  console.log(`New listing created with the following id: ${result.insertedId}`);
+
+}
+
 // FIND bots
-async function findBotName(botName) {
-  const result = await bots.db("test").collection("bots").findOne({ name: botName});
+async function findActiveBot(client, platform) {
+  const result = await client.db("test").collection("activeBots").findOne({ platform: platform});
+  if (result) {
+      console.log(`Found a bot running on '${platform}':`);
+      console.log(result);
+  } else {
+      console.log(`No bot running on '${platform}'`);
+  }
+  return result;
+}
+
+// FIND bots
+async function findBotName(client, botName) {
+  const result = await client.db("test").collection("bots").findOne({ name: botName});
   if (result) {
       console.log(`Found a bot in the collection with the name '${botName}':`);
       console.log(result);
@@ -72,4 +94,4 @@ async function DatabaseConnectionClose(client){
 }
 
 // exports functions
-module.exports = { findOneListingByName, DatabaseConnectionOpen, DatabaseConnectionClose };
+module.exports = { findBotName, findActiveBot, findOneListingByName, DatabaseConnectionOpen, DatabaseConnectionClose, MarkBotAsRunning };

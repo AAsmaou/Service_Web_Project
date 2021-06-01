@@ -40,10 +40,9 @@ app.post('/', function (req, res) {
 
   // find users in the database
   const result = tools.findOneListingByName(client, nickname, psw);
-
+  console.log('here' + result);
   // redirect users to web service
   if (result) {
-    //res.render('chat', {data: User});
     // PASS USERNAME
     var user = encodeURIComponent(nickname);
     res.redirect('http://localhost:3002/chatbot'+'?user=' + user);

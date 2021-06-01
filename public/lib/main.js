@@ -64,6 +64,21 @@ $(function() {
     }
   }
 
+
+  // Read message robot and display it
+  const readBotMessage = () => {
+    socket.on('bot message', (data) => {
+      let message = data.botmessage;
+      let username = data.botName;
+      // Prevent markup from being injected into the message
+      message = cleanInput(message);
+      // if there is a non-empty message and a socket connection
+      if (message) {
+        addChatMessage({ username, message });
+      }
+    });
+  }
+
   // Log a message
   const log = (message, options) => {
     const $el = $('<li>').addClass('log').text(message);
@@ -184,6 +199,16 @@ $(function() {
   }
 
   // Keyboard events
+  $( window ).load(function() {
+    connected = true;
+    // Display the welcome message
+    const message = 'Welcome in the ChatRoom ';
+    log(message, {
+      prepend: true
+    });
+    readBotMessage();
+  });
+  
 
   $window.keydown(event => {
     // Auto-focus the current input when a key is typed
@@ -214,17 +239,6 @@ $(function() {
   });
 
   // Socket events
-
-  // Whenever the server emits 'login', log the login message
-  socket.on('login', (data) => {
-    connected = true;
-    // Display the welcome message
-    const message = 'Welcome in the ChatRoom ';
-    log(message, {
-      prepend: true
-    });
-    addParticipantsMessage(data);
-  });
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', (data) => {
