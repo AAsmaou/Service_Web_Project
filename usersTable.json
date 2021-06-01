@@ -14,4 +14,4 @@ db.users.insertMany([
     "username": "user3", 
     "psw": "user3"
   }
-])
+]);

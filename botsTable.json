@@ -1,0 +1,14 @@
+db.bots.insertMany([
+    {
+      "name": "Steve"
+    },
+    {
+      "name": "Alice"
+    },
+    {
+      "name": "Bob"
+    },
+    {
+      "name": "Bill"
+    }
+]);

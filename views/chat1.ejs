@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- Metas -->
+<meta charset="utf-8">
+<title>ChatBot</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Css -->
+<link rel='stylesheet' href='chatbox.css' />
+
+<script src='lib/socket.io\client-dist\socket.io.js'></script>
+
+<!-- <script src='lib/jquery.js'></script> -->
+
+<script type="text/javascript">
+	const inputField = document.querySelector(".message_form__input");
+	const messageForm = document.querySelector(".message_form");
+	const messageBox = document.querySelector(".try-dialogue");
+
+	const addNewMessage = ({ user, message }) => {
+	const time = new Date();
+	const formattedTime = time.toLocaleString("en-US", { hour: "numeric", minute: "numeric" });
+
+	const receivedMsg = `
+	<div class="incoming__message">
+		<div class="received__message">
+		<p>${message}</p>
+		<div class="message__info">
+			<span class="message__author">${user}</span>
+			<span class="time_date">${formattedTime}</span>
+		</div>
+		</div>
+	</div>`;
+
+	const myMsg = `
+	<div class="outgoing__message">
+		<div class="sent__message">
+		<p>${message}</p>
+		<div class="message__info">
+			<span class="time_date">${formattedTime}</span>
+		</div>
+		</div>
+	</div>`;
+
+	messageBox.innerHTML += user === userName ? myMsg : receivedMsg;
+	};
+
+	messageForm.addEventListener("submit", (e) => {
+	e.preventDefault();
+	if (!inputField.value) {
+		return;
+	}
+
+	socket.emit("chat message", {
+		message: inputField.value,
+		nick: userName,
+	});
+
+	inputField.value = "";
+	});
+
+	socket.on("chat message", function (data) {
+	addNewMessage({ user: data.nick, message: data.message });
+	});
+
+</script>
+
+</head>
+
+<body>	
+
+	<div class="modal-dialog center">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="chatModalLabel">Dialogue</h4>
+			</div>
+			<div class="modal-body">
+				<div class="try-dialogue" id="dialogue">
+
+				</div>
+
+					<legend>Send a Message</legend>
+					<form method="post" class='message_form'>
+						<input type="text" class="message_form_input" name="message" id="input" value="" placeholder="Press Enter to send">
+					</form>
+			</div>
+			<div class="modal-footer">
+				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -43,7 +43,10 @@ app.post('/', function (req, res) {
 
   // redirect users to web service
   if (result) {
-    res.render('chat', {data: User});
+    //res.render('chat', {data: User});
+    // PASS USERNAME
+    var string = encodeURIComponent(nickname);
+    res.redirect('http://localhost:3002/chatbot'+'?user=' + string);
   }
 })
 

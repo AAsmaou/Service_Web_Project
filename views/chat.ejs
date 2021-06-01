@@ -1,52 +1,24 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<!-- Metas -->
-<meta charset="utf-8">
-<title>ChatBot</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Css -->
-<link rel='stylesheet' href='chatbox.css' />
-<script type="text/javascript">
-	// Using jQuery.
-	
-	$(function() {
-		$('form').each(function() {
-			$(this).find('input').keypress(function(e) {
-				// Enter pressed?
-				if(e.which == 10 || e.which == 13) {
-					this.form.submit();
-				}
-			});
-		});
-	});
-	</script>
+  <meta charset="UTF-8">
+  <title>Socket.IO Chat Example</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+<body>
+  <ul class="pages">
+    <li class="chat page">
+      <div class="chatArea">
+        <ul class="messages"></ul>
+      </div>
+      <input class="inputMessage" placeholder="Type here..."/>
+    </li>
+    
+  </ul>
 
-<body>	
-
-	<div class="modal-dialog center">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="chatModalLabel">Dialogue</h4>
-			</div>
-			<div class="modal-body">
-				<div class="try-dialogue" id="dialogue">
-
-				</div>
-
-					<legend>Send a Message</legend>
-					<form method="post">
-						<input type="text" class="form-control" name="message" value="" placeholder="Press Enter to send">
-					</form>
-			</div>
-			<div class="modal-footer">
-				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
-			</div>
-		</div>
-	</div>
+  <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src='lib/socket.io\client-dist\socket.io.js'></script>
+  <script src="lib/main.js"></script>
+  
 </body>
-
 </html>
