@@ -2,6 +2,17 @@
 //##### UTILITY FOR MONGODB DATABASE #####
 //########################################
 
+// FIND bots
+async function findBotName(botName) {
+  const result = await bots.db("test").collection("bots").findOne({ name: botName});
+  if (result) {
+      console.log(`Found a bot in the collection with the name '${botName}':`);
+      console.log(result);
+  } else {
+      console.log(`No bot with the name '${botName}'`);
+  }
+  return result;
+}
 
 // FIND USERS
 async function findOneListingByName(client, user, password) {
