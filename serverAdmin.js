@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
     else{
       bots = val;
     }
-    res.render('chat1', { results: bots, filelist: files, DiscordBot: BotOnDiscord });
+    res.render('admin', { results: bots, filelist: files, DiscordBot: BotOnDiscord });
   });
 
 });
@@ -60,7 +60,7 @@ app.post('/', function (req, res) {
   // Send Name Chatbot
   let botName = 'Steeve'; //just for developing
   tools.MarkBotAsRunning(client, { name: botName, platform: "Web" });
-  res.render('admin');
+  //res.render('admin');
 })
 
 // listen Admin service
