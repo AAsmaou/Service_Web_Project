@@ -6,16 +6,80 @@ body {
     height: 100%;
 }
 
+fieldset {
+    display: table;
+}
+fieldset p {
+    display: table-row;
+}
+
+fieldset select, 
+fieldset label {
+    display: table-cell;
+    margin: 3px;
+}
+fieldset label {
+    text-align: left;
+}
+
 .modal-dialog {
     position: relative;
     width: 95%;
     margin: 10px;
+    text-align: center;
+}
+
+.create {
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box; 
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    margin-bottom: 35px;
+    display: inline-block;
+    margin-right: 10%;
+}
+
+.remove {
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box; 
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    margin-bottom: 35px;
+    display: inline-block;
+    margin-right: 10%;
+}
+
+.status {
+    position: relative;
+    background-color: #fff;
+    -webkit-background-clip: padding-box; 
+    background-clip: padding-box;
+    border: 1px solid #999;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 6px;
+    outline: 0;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    margin-bottom: 35px;
+    display: inline-block;
 }
 
 .modal-content {
     position: relative;
     background-color: #fff;
-    -webkit-background-clip: padding-box;
+    -webkit-background-clip: padding-box; 
     background-clip: padding-box;
     border: 1px solid #999;
     border: 1px solid rgba(0,0,0,.2);
@@ -29,6 +93,7 @@ body {
     min-height: 16.43px;
     padding: 15px;
     border-bottom: 1px solid #e5e5e5;
+    text-align: center;
 }
 
 button::-moz-focus-inner, input::-moz-focus-inner {
@@ -172,4 +237,9 @@ legend {
   left: 50%;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
+}
+
+.centeralign{
+    text-align: center;
+    align-items: center
 }

@@ -59,7 +59,7 @@ function success_handler() {
 
   io.on('connection', (socket) => {
 
-    let robot;
+    var robot;
 
     // when the client emits 'new message', this listens and executes
     socket.on('new message', (data) => {
@@ -81,18 +81,27 @@ function success_handler() {
       });
     });
 
-
+    
     // set the name of the bot for the chat
-    tools.findActiveBot(client, 'Web').then( (val) => {
-      robot = val.name;
-      console.log(robot);
-      if (robot){
+    // ASSUMPTION: we pick the last bots launched on the web platform
+    tools.findActiveBot(client, 'Web').then((val) => {
+      
+      if (val != -1){
+        
+        val.forEach((result) => {
+
+          robot = result.name;
+    
+        });
+        console.log(robot);
         socket.emit('bot message', {botName: robot, botmessage: "Hello :) How are you going?"});
       }
       else{
         console.log('No active bots on Web platform!');
+        socket.emit('bot message', {botName: 'ERROR', botmessage: "No bots running on the Server at the moment!"});
       }}
     );
+
 
     // when the client emits 'add user', this listens and executes
     socket.on('add user', (username) => {
