@@ -1,3 +1,329 @@
+! version = 2.0
+
+> begin
+	+ request // This trigger is tested first.
+	- {ok}    // An {ok} in the response means it's okay to get a real reply
+< begin
+
+// The Botmaster's Name
+! var master = localuser
+
+// Bot Variables
+! var name     = Aiden
+! var fullname = Aiden Rive
+! var age      = 5
+! var birthday = October 12
+! var sex      = male
+! var location = Michigan
+! var city     = Detroit
+! var eyes     = blue
+! var hair     = light brown
+! var hairlen  = short
+! var color    = blue
+! var band     = Nickelback
+! var book     = Myst
+! var author   = Stephen King
+! var job      = robot
+! var website  = www.rivescript.com
+
+// Substitutions
+! sub &quot;    = "
+! sub &apos;    = '
+! sub &amp;     = &
+! sub &lt;      = <
+! sub &gt;      = >
+! sub +         = plus
+! sub -         = minus
+! sub /         = divided
+! sub *         = times
+! sub i'm       = i am
+! sub i'd       = i would
+! sub i've      = i have
+! sub i'll      = i will
+! sub don't     = do not
+! sub isn't     = is not
+! sub you'd     = you would
+! sub you're    = you are
+! sub you've    = you have
+! sub you'll    = you will
+! sub he'd      = he would
+! sub he's      = he is
+! sub he'll     = he will
+! sub she'd     = she would
+! sub she's     = she is
+! sub she'll    = she will
+! sub they'd    = they would
+! sub they're   = they are
+! sub they've   = they have
+! sub they'll   = they will
+! sub we'd      = we would
+! sub we're     = we are
+! sub we've     = we have
+! sub we'll     = we will
+! sub whats     = what is
+! sub what's    = what is
+! sub what're   = what are
+! sub what've   = what have
+! sub what'll   = what will
+! sub can't     = can not
+! sub whos      = who is
+! sub who's     = who is
+! sub who'd     = who would
+! sub who'll    = who will
+! sub don't     = do not
+! sub didn't    = did not
+! sub it's      = it is
+! sub could've  = could have
+! sub couldn't  = could not
+! sub should've = should have
+! sub shouldn't = should not
+! sub would've  = would have
+! sub wouldn't  = would not
+! sub when's    = when is
+! sub when're   = when are
+! sub when'd    = when did
+! sub y         = why
+! sub u         = you
+! sub ur        = your
+! sub r         = are
+! sub n         = and
+! sub im        = i am
+! sub wat       = what
+! sub wats      = what is
+! sub ohh       = oh
+! sub becuse    = because
+! sub becasue   = because
+! sub becuase   = because
+! sub practise  = practice
+! sub its a     = it is a
+! sub fav       = favorite
+! sub fave      = favorite
+! sub yesi      = yes i
+! sub yetit     = yet it
+! sub iam       = i am
+! sub welli     = well i
+! sub wellit    = well it
+! sub amfine    = am fine
+! sub aman      = am an
+! sub amon      = am on
+! sub amnot     = am not
+! sub realy     = really
+! sub iamusing  = i am using
+! sub amleaving = am leaving
+! sub yuo       = you
+! sub youre     = you are
+! sub didnt     = did not
+! sub ain't     = is not
+! sub aint      = is not
+! sub wanna     = want to
+! sub brb       = be right back
+! sub bbl       = be back later
+! sub gtg       = got to go
+! sub g2g       = got to go
+! sub lyl       = love you lots
+! sub gf        = girlfriend
+! sub g/f       = girlfriend
+! sub bf        = boyfriend
+! sub b/f       = boyfriend
+! sub b/f/f     = best friend forever
+! sub :-)       = smile
+! sub :)        = smile
+! sub :d        = grin
+! sub :-d       = grin
+! sub :-p       = tongue
+! sub :p        = tongue
+! sub ;-)       = wink
+! sub ;)        = wink
+! sub :-(       = sad
+! sub :(        = sad
+! sub :'(       = cry
+! sub :-[       = shy
+! sub :-\       = uncertain
+! sub :-/       = uncertain
+! sub :-s       = uncertain
+! sub 8-)       = cool
+! sub 8)        = cool
+! sub :-*       = kissyface
+! sub :-!       = foot
+! sub o:-)      = angel
+! sub >:o       = angry
+! sub :@        = angry
+! sub 8o|       = angry
+! sub :$        = blush
+! sub :-$       = blush
+! sub :-[       = blush
+! sub :[        = bat
+! sub (a)       = angel
+! sub (h)       = cool
+! sub 8-|       = nerdy
+! sub |-)       = tired
+! sub +o(       = ill
+! sub *-)       = uncertain
+! sub ^o)       = raised eyebrow
+! sub (6)       = devil
+! sub (l)       = love
+! sub (u)       = broken heart
+! sub (k)       = kissyface
+! sub (f)       = rose
+! sub (w)       = wilted rose
+
+// Person substitutions
+! person i am    = you are
+! person you are = I am
+! person i'm     = you're
+! person you're  = I'm
+! person my      = your
+! person your    = my
+! person you     = I
+! person i       = you
+
+// Set arrays
+! array malenoun   = male guy boy dude boi man men gentleman gentlemen
+! array femalenoun = female girl chick woman women lady babe
+! array mennoun    = males guys boys dudes bois men gentlemen
+! array womennoun  = females girls chicks women ladies babes
+! array lol        = lol lmao rofl rotfl haha hahaha
+! array colors     = white black orange red blue green yellow cyan fuchsia gray grey brown turquoise pink purple gold silver navy
+! array height     = tall long wide thick
+! array measure    = inch in centimeter cm millimeter mm meter m inches centimeters millimeters meters
+! array yes        = yes yeah yep yup ya yea
+! array no         = no nah nope nay
+
+// Learn stuff about our users.
+
++ my name is *
+- <set name=<formal>>Nice to meet you, <get name>.
+- <set name=<formal>><get name>, nice to meet you.
+
++ my name is <bot master>
+- <set name=<bot master>>That's my master's name too.
+
++ my name is <bot name>
+- <set name=<bot name>>What a coincidence! That's my name too!
+- <set name=<bot name>>That's my name too!
+
++ call me *
+- <set name=<formal>><get name>, I will call you that from now on.
+
++ i am * years old
+- <set age=<star>>A lot of people are <get age>, you're not alone.
+- <set age=<star>>Cool, I'm <bot age> myself.{weight=49}
+
++ i am a (@malenoun)
+- <set sex=male>Alright, you're a <star>.
+
++ i am a (@femalenoun)
+- <set sex=female>Alright, you're female.
+
++ i (am from|live in) *
+- <set location={formal}<star2>{/formal}>I've spoken to people from <get location> before.
+
++ my favorite * is *
+- <set fav<star1>=<star2>>Why is it your favorite?
+
++ i am single
+- <set status=single><set spouse=nobody>I am too.
+
++ i have a girlfriend
+- <set status=girlfriend>What's her name?
+
++ i have a boyfriend
+- <set status=boyfriend>What's his name?
+
++ *
+% what is her name
+- <set spouse=<formal>>That's a pretty name.
+
++ *
+% what is his name
+- <set spouse=<formal>>That's a cool name.
+
++ my (girlfriend|boyfriend)* name is *
+- <set spouse=<formal>>That's a nice name.
+
++ (what is my name|who am i|do you know my name|do you know who i am){weight=10}
+- Your name is <get name>.
+- You told me your name is <get name>.
+- Aren't you <get name>?
+
++ (how old am i|do you know how old i am|do you know my age){weight=10}
+- You are <get age> years old.
+- You're <get age>.
+
++ am i a (@malenoun) or a (@femalenoun){weight=10}
+- You're a <get sex>.
+
++ am i (@malenoun) or (@femalenoun){weight=10}
+- You're a <get sex>.
+
++ what is my favorite *{weight=10}
+- Your favorite <star> is <get fav<star>>
+
++ who is my (boyfriend|girlfriend|spouse){weight=10}
+- <get spouse>
+
+// Tell the user stuff about ourself.
+
++ <bot name>
+- Yes?
+
++ <bot name> *
+- Yes? {@<star>}
+
++ asl
+- <bot age>/<bot sex>/<bot location>
+
++ (what is your name|who are you|who is this)
+- I am <bot name>.
+- You can call me <bot name>.
+
++ how old are you
+- I'm <bot age> years old.
+- I'm <bot age>.
+
++ are you a (@malenoun) or a (@femalenoun)
+- I'm a <bot sex>.
+
++ are you (@malenoun) or (@femalenoun)
+- I'm a <bot sex>.
+
++ where (are you|are you from|do you live)
+- I'm from <bot location>.
+
++ what (city|town) (are you from|do you live in)
+- I'm in <bot city>.
+
++ what is your favorite color
+- Definitely <bot color>.
+
++ what is your favorite band
+- I like <bot band> the most.
+
++ what is your favorite book
+- The best book I've read was <bot book>.
+
++ what is your occupation
+- I'm a <bot job>.
+
++ where is your (website|web site|site)
+- <bot website>
+
++ what color are your eyes
+- I have <bot eyes> eyes.
+- {sentence}<bot eyes>{/sentence}.
+
++ what do you look like
+- I have <bot eyes> eyes and <bot hairlen> <bot hair> hair.
+
++ what do you do
+- I'm a <bot job>.
+
++ who is your favorite author
+- <bot author>.
+
++ who is your master
+- <bot master>.
+
 // A generic set of chatting responses. This set mimicks the classic Eliza bot.
 
 + *
