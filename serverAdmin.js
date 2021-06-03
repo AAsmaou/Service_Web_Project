@@ -22,16 +22,21 @@ app.use(express.static("public"));
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
+// collect names of the brain for the bots
+var fs = require('fs');
+var files = fs.readdirSync('./brain');
+console.log(files);
 
-// Render home page admin
+
+
+// RENDER HOME PAGE FOR ADMIN
 app.get('/', (req, res) => {
-  var fs = require('fs');
-  var files = fs.readdirSync('./brain');
-  console.log(files);
-  var BotOnDiscord;
-  var bots;
+  
+  var BotOnDiscord = [];
+  var bots = [];
+  
 
-  // find all the active bots on Discord for the Discord control pannel
+  // FIND ACTIVE BOTS ON DISCORD
   tools.findActiveBot(client, 'Discord').then((val) => {
     if (val==-1){
       BotOnDiscord = -1;
@@ -39,28 +44,59 @@ app.get('/', (req, res) => {
     else{
       BotOnDiscord = val;
     }
+    // FIND ALL BOTS
+    tools.findBots(client).then((val) => {
+      if (val==-1){
+        bots = -1;
+      }
+      else{
+        bots = val;
+      }
+    res.render('admin', { results: bots, filelist: files, DiscordBot: BotOnDiscord});
   });
-
-  
-  tools.findBots(client).then((val) => {
-    if (val==-1){
-      bots = -1;
-    }
-    else{
-      bots = val;
-    }
-    res.render('admin', { results: bots, filelist: files, DiscordBot: BotOnDiscord });
-  });
-
+});
 });
 
-// create the bot
+
+// LAUNCH BOT
 //use case: select the name of the bot from a list and send it to the chatroom
 app.post('/', function (req, res) {
   // Send Name Chatbot
-  let botName = 'Steeve'; //just for developing
-  tools.MarkBotAsRunning(client, { name: botName, platform: "Web" });
-  //res.render('admin');
+  var botName = 'Steeve'; //just for developing
+  var BotOnDiscord = [];
+  var bots = [];
+  
+  // check if botName is already running
+  tools.findActiveBotName(client, botName).then((val) => {
+    if (val==-1){
+      tools.MarkBotAsRunning(client, "Steeve", {status: 'on', platform: 'Web'});
+      console.log("Bot launched");
+    }
+    else{
+      console.log("Bot already running");
+    }
+      // update interface 
+      // update bots running on Discord
+      tools.findActiveBot(client, 'Discord').then((val) => {
+        if (val==-1){
+          BotOnDiscord = -1;
+        }
+        else{
+          BotOnDiscord = val;
+        }
+        // find all bots
+        tools.findBots(client).then((val) => {
+          if (val==-1){
+            bots = -1;
+          }
+          else{
+            bots = val;
+          }
+      res.render('admin', { results: bots, filelist: files, DiscordBot: BotOnDiscord});
+      });
+    });
+  });
+
 })
 
 // listen Admin service

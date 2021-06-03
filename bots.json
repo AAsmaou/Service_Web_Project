@@ -1,14 +1,18 @@
-bots([
+db.bots.insertMany([
     {
-      "name": "Steve"
+      "name": "Steve",
+      "status": "off"
     },
     {
-      "name": "Alice"
+      "name": "Alice",
+      "status": "off"
     },
     {
-      "name": "Bob"
+      "name": "Bob",
+      "status": "off"
     },
     {
-      "name": "Bill"
+      "name": "Bill",
+      "status": "off"
     }
   ])

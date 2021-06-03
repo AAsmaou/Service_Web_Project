@@ -3,19 +3,33 @@
 //########################################
 
 
-// INSERT a bot into activeBots
-async function MarkBotAsRunning(client, newListing) {
+// SET bot as running
+  async function MarkBotAsRunning(client, nameOfListing, updatedListing) {
 
-  const result = await client.db("test").collection("activeBots").insertOne(newListing);
+    const result = await client.db("test").collection("bots").updateOne({ name: nameOfListing }, { $set: updatedListing });
 
-  console.log(`New listing created with the following id: ${result.insertedId}`);
+    console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+
+    console.log(`${result.modifiedCount} document(s) was/were updated.`);
+
+}
+
+// SET bot as stopped
+// eg : tools.MarkBotAsStopped(client, "Steeve", {status: 'off'}, {platform: 'Web'});
+async function MarkBotAsStopped(client, nameOfListing, updatedListing, removeListing) {
+
+  const result = await client.db("test").collection("bots").updateOne({ name: nameOfListing }, { $set: updatedListing, $unset: removeListing });
+
+  console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+
+  console.log(`${result.modifiedCount} document(s) was/were updated.`);
 
 }
 
 // FIND active bots on a specific platform
 // sort _id = 1 impose a ascendind order --> at the top the ones added most recently
 async function findActiveBot(client, platform) {
-  const cursor = await client.db("test").collection("activeBots").find({ platform: platform }).sort({ _id: 1 });
+  const cursor = await client.db("test").collection("bots").find({ platform: platform }).sort({ _id: 1 });
 
   var results = await cursor.toArray();
 
@@ -38,26 +52,20 @@ async function findActiveBot(client, platform) {
   return results;
 }
 
+// find active bots by name
+async function findActiveBotName(client, name) {
+  const cursor = await client.db("test").collection("bots").find({ name: name, status: "on" });
 
-// FIND all active bots
-async function findAllActiveBots(client) {
-  const cursor = await client.db("test").collection("activeBots").find();
-  const results = await cursor.toArray();
+  var results = await cursor.toArray();
 
   if (results.length > 0) {
 
-    console.log(`Found active bot(s):`);
-
-    results.forEach((result, i) => {
-
-
-      console.log(`${i + 1}. name: ${result.name}`);
-
-    });
+    console.log(`Found active bot(s) ${name}`);
 
   } else {
 
-    console.log(`No active bots found`);
+    console.log(`No active bots found with name ${name}`);
+    results = -1;
 
   }
   return results;
@@ -160,4 +168,4 @@ async function DatabaseConnectionClose(client) {
 }
 
 // exports functions
-module.exports = { findBots, findBotName, findActiveBot, findAllActiveBots, findOneListingByName, DatabaseConnectionOpen, DatabaseConnectionClose, MarkBotAsRunning };
+module.exports = { findBots, findBotName, findActiveBot, findActiveBotName, findOneListingByName, DatabaseConnectionOpen, DatabaseConnectionClose, MarkBotAsRunning, MarkBotAsStopped };

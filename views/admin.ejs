@@ -10,59 +10,64 @@
 
 	<!-- Css -->
 	<link rel='stylesheet' href='chatbox.css' />
+	<link rel='stylesheet' href='font/all.css' />
 
 </head>
 
 <body>
 
 	<div class="modal-dialog center">
-		<span>
+		<div class="control-group">
 			<div class="create">
 				<div class="modal-header">
 					<h4 class="modal-title centeralign" id="chatModalLabel">Launch Bots!</h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body ">
 					<form method="post" class='optionsCreate'>
-						<fieldset>
-							<p>
-								<label for="interface">Choose the interface:</label>
-								<select name="interface" id="interface">
-									<option value="web">Browser</option>
-									<option value="discord">Discord</option>
-								</select>
-								<br><br>
-							</p>
-							<p>
-								<label for="BotName">Choose the chatbot:</label>
-								<select name="BotName" id="BotName">
-									<% if(results==-1) { %>
-										<option value='nobot'>
-											no bots running
-										</option>
-									<% } else { %>
-										<% results.forEach(function(bot) { %>
-											<option value=<%=bot.name %>>
-												<%= bot.name %>
+						<div class="lauchControls">
+							<fieldset>
+								<p>
+									<label for="interface">Choose the interface:</label>
+									<select name="interface" id="interface">
+										<option value="web">Browser</option>
+										<option value="discord">Discord</option>
+									</select>
+									<br><br>
+								</p>
+								<p>
+									<label for="BotName">Choose the chatbot:</label>
+									<select name="BotName" id="BotName">
+										<% if(results==-1) { %>
+											<option value='nobot'>
+												no bots running
 											</option>
-										<% }); %>
-									<% } %>
-								</select>
-								<br><br>
-							</p>
-							<p>
-								<label for="interface">Choose the brain:</label>
-								<select name="brain" id="brain">
-									<% filelist.forEach(function(filename) { %>
-										<option value=<%=filename%>>
-											<%= filename %>
-										</option>
-										<% }); %>
-								</select>
-								<br><br>
-							</p>
-						</fieldset>
+											<% } else { %>
+												<% results.forEach(function(bot) { %>
+													<option value=<%=bot.name %>>
+														<%= bot.name %>
+													</option>
+													<% }); %>
+														<% } %>
+									</select>
+									<br><br>
+								</p>
+								<p>
+									<label for="interface">Choose the brain:</label>
+									<select name="brain" id="brain">
+										<% filelist.forEach(function(filename) { %>
+											<option value=<%=filename%>>
+												<%= filename %>
+											</option>
+											<% }); %>
+									</select>
+									<br><br>
+								</p>
+							</fieldset>
+						</div>
 						<div class="centeralign">
 							<input type="submit" value="Launch">
+							<!-- Update the brain -->
+							<input type="submit" value="Update">
 						</div>
 					</form>
 				</div>
@@ -77,27 +82,29 @@
 				</div>
 				<div class="modal-body">
 					<form method="post" class='optionsCreate'>
-						<fieldset>
-							<p>
-								<label for="BotName">Choose the chatbot:</label>
-								<select name="BotName" id="BotName">
-									<% if(DiscordBot==-1) { %>
-										<option value='nobot'>
-											no bots running on Discords
-										</option>
-									<% } else { %>
-										<% DiscordBot.forEach(function(bot) { %>
-											<option value=<%=bot.name %>>
-												<%= bot.name %>
+						<div class="delete">
+							<fieldset>
+								<p>
+									<label for="BotName">Choose the chatbot:</label>
+									<select name="BotName" id="BotName">
+										<% if(DiscordBot==-1) { %>
+											<option value='nobot'>
+												no bots running on Discords
 											</option>
-										<% }); %>
-									<% } %>
-								</select>
-								<br><br>
-							</p>
-						</fieldset>
+											<% } else { %>
+												<% DiscordBot.forEach(function(bot) { %>
+													<option value=<%=bot.name %>>
+														<%= bot.name %>
+													</option>
+													<% }); %>
+														<% } %>
+									</select>
+									<br><br>
+								</p>
+							</fieldset>
+						</div>
 						<div class="centeralign">
-							<input type="submit" value="Disconnect">
+							<input style="margin-bottom: 60px;" type="submit" value="Disconnect">
 						</div>
 					</form>
 				</div>
@@ -111,13 +118,45 @@
 					<h4 class="modal-title centeralign" id="chatModalLabel">Status Bots</h4>
 				</div>
 				<div class="modal-body">
-
+					<ul style="margin-bottom: 55px;" name="BotName" id="BotName">
+						<% if(results==-1) { %>
+							<li>
+								<span class="bot">
+								No bots found
+								</span>
+							</li>
+							<% } else { %>
+								<% results.forEach(function(bot) { %>
+									<p>
+										<li>
+											<span class="bot">
+											<%= bot.name %>
+											</span>
+											<span class="dots">:</span>
+												<% if(bot.status=="on" ) { %>
+													<span class="circle">
+														<i style="color:green" class="fas fa-dot-circle"></i>
+													</span>
+													<span class="run">
+													RUNNING on <%= bot.platform %>
+												</span>
+													<% } else { %>
+														<span class="circle">
+															<i style="color:red" class="fas fa-dot-circle"></i>
+														</span>
+														<span class="stop">STOPPED</span>
+														<% } %>
+										</li>
+									</p>
+									<% }); %>
+										<% } %>
+					</ul>
 				</div>
 				<div class="modal-footer">
 					<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
 				</div>
 			</div>
-		</span>
+		</div>
 
 		<div class="modal-content">
 			<div class="modal-header">
