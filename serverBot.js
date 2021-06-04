@@ -27,6 +27,7 @@ tools.DatabaseConnectionOpen(client).catch(console.error);
 
 const RiveScript = require('rivescript') ;
 var bot = new RiveScript();
+var robot;
 
 
 let userName = '';
@@ -41,7 +42,37 @@ appBot.get('/chatbot', (req, res) => {
   else {
     res.render('chat');
     console.log(userName);
-    bot.loadDirectory("brain").then(success_handler).catch(error_handler);
+
+    var brain;
+
+    // set the name of the bot for the chat and the brain used
+    // ASSUMPTION: we pick the last bots launched on the web platform if more exists
+    tools.findActiveBot(client, 'Browser').then((val) => {
+      
+      if (val != -1){
+        
+        val.forEach((result) => {
+
+          robot = result.name;
+          brain = result.brains;
+          bot.loadFile("brain/" + brain).then(success_handler).catch(error_handler);
+
+        });
+        console.log(robot);
+        
+      }
+      else{
+        robot = "noRobot";
+      }}
+    );
+
+    // load all the brain files
+    //var filelist = "brain/" + brains[0] ;  
+
+    //for (let index = 1; index < brains.length; index++) {
+      //filelist = filelist + "," + "brain/" + brains[index];
+      //console.log(filelist);  
+  //}
   }
 })
 
@@ -59,8 +90,14 @@ function success_handler() {
 
   io.on('connection', (socket) => {
 
-    var robot;
-
+    // welcome message from robot
+    if (robot == "noRobot"){
+      console.log('No active bots on Web platform!');
+      socket.emit('bot message', {botName: 'ERROR', botmessage: "No bots running on the Server at the moment!"});
+    }
+    else{
+    socket.emit('bot message', {botName: robot, botmessage: "Hello :) How are you going?"});
+    }
     // when the client emits 'new message', this listens and executes
     socket.on('new message', (data) => {
 
@@ -80,27 +117,6 @@ function success_handler() {
         message: data
       });
     });
-
-    
-    // set the name of the bot for the chat
-    // ASSUMPTION: we pick the last bots launched on the web platform
-    tools.findActiveBot(client, 'Web').then((val) => {
-      
-      if (val != -1){
-        
-        val.forEach((result) => {
-
-          robot = result.name;
-    
-        });
-        console.log(robot);
-        socket.emit('bot message', {botName: robot, botmessage: "Hello :) How are you going?"});
-      }
-      else{
-        console.log('No active bots on Web platform!');
-        socket.emit('bot message', {botName: 'ERROR', botmessage: "No bots running on the Server at the moment!"});
-      }}
-    );
 
 
     // when the client emits 'add user', this listens and executes

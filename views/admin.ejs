@@ -29,8 +29,8 @@
 								<p>
 									<label for="interface">Choose the interface:</label>
 									<select name="interface" id="interface">
-										<option value="web">Browser</option>
-										<option value="discord">Discord</option>
+										<option value="Browser">Browser</option>
+										<option value="Discord">Discord</option>
 									</select>
 									<br><br>
 								</p>
@@ -39,7 +39,7 @@
 									<select name="BotName" id="BotName">
 										<% if(results==-1) { %>
 											<option value='nobot'>
-												no bots running
+												No bots running
 											</option>
 											<% } else { %>
 												<% results.forEach(function(bot) { %>

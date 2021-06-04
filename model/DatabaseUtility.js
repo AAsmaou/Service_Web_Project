@@ -35,7 +35,7 @@ async function findActiveBot(client, platform) {
 
   if (results.length > 0) {
 
-    console.log(`Found active bot(s) on platform ${platform}:`);
+    console.log(`Found active bot(s) on ${platform}`);
 
     results.forEach((result, i) => {
 
@@ -45,7 +45,7 @@ async function findActiveBot(client, platform) {
 
   } else {
 
-    console.log(`No active bots found`);
+    console.log(`No active bots found on ${platform}`);
     results = -1;
 
   }
