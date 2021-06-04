@@ -152,6 +152,8 @@ app.post('/', function (req, res) {
 
 })
 
+
+// URL for connecting bot to your server: https://discord.com/api/oauth2/authorize?client_id=850311681304821770&permissions=8&scope=bot
 async function launchOnDiscord(name) {
 
   // require the discord.js module
@@ -161,12 +163,13 @@ async function launchOnDiscord(name) {
   // create a new Discord client
   const clientDiscord = new Discord.Client();
 
-  // set bot name
-  //client.user.setUsername(name);  // try to see it works
+    // try to see it works
 
   // when the client is ready, run this code
   // this event will only trigger one time after logging in
   clientDiscord.once('ready', () => {
+    // set bot name
+    clientDiscord.user.setUsername(name);
     console.log("Bot ready on Discord");
   });
 
