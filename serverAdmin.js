@@ -159,6 +159,9 @@ function launchOnDiscord(name) {
   // create a new Discord client
   const clientDiscord = new Discord.Client();
 
+  // set bot name
+
+
   // when the client is ready, run this code
   // this event will only trigger one time after logging in
   clientDiscord.once('ready', () => {
