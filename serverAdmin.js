@@ -160,7 +160,7 @@ function launchOnDiscord(name) {
   const clientDiscord = new Discord.Client();
 
   // set bot name
-
+  client.user.setUsername(name);
 
   // when the client is ready, run this code
   // this event will only trigger one time after logging in
