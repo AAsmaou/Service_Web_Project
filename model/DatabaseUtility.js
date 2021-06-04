@@ -29,7 +29,7 @@ async function MarkBotAsStopped(client, nameOfListing, updatedListing, removeLis
 // FIND active bots on a specific platform
 // sort _id = 1 impose a ascendind order --> at the top the ones added most recently
 async function findActiveBot(client, platform) {
-  const cursor = await client.db("test").collection("bots").find({ platform: platform }).sort({ _id: 1 });
+  const cursor = await client.db("test").collection("bots").find({ status: "on", platform: platform }).sort({ _id: 1 });
 
   var results = await cursor.toArray();
 
@@ -53,18 +53,18 @@ async function findActiveBot(client, platform) {
 }
 
 // find active bots by name
-async function findActiveBotName(client, name) {
-  const cursor = await client.db("test").collection("bots").find({ name: name, status: "on" });
+async function findActiveBotName(client, name, platform) {
+  const cursor = await client.db("test").collection("bots").find({ name: name, status: "on", platform: platform });
 
   var results = await cursor.toArray();
 
   if (results.length > 0) {
 
-    console.log(`Found active bot(s) ${name}`);
+    console.log(`Found active bot(s) ${name} on ${platform}`);
 
   } else {
 
-    console.log(`No active bots found with name ${name}`);
+    console.log(`No active bots found with name ${name} on ${platform}`);
     results = -1;
 
   }

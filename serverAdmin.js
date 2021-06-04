@@ -66,7 +66,9 @@ app.get('/', (req, res) => {
 app.post('/', function (req, res) {
   // Send Name Chatbot
   var botName = req.body.BotName; //just for developing
+  console.log("bot to launch: " + botName);
   var platform = req.body.interface;
+  console.log("interface: " + platform);
   var brainFile = req.body.brain;
   console.log(brainFile);
   var BotOnDiscord = [];
@@ -77,7 +79,7 @@ app.post('/', function (req, res) {
   //********************************
   // check if botName is already running
   if (platform == "Browser") {
-    tools.findActiveBotName(client, botName).then((val) => {
+    tools.findActiveBotName(client, botName, platform).then((val) => {
       if (val == -1) {
         tools.MarkBotAsRunning(client, botName, { status: 'on', platform: platform, brains: brainFile });
         console.log("Bot launched");
@@ -113,13 +115,13 @@ app.post('/', function (req, res) {
   //********************************
   else if (platform == "Discord") {
 
-    tools.findActiveBotName(client, botName).then((val) => {
+    tools.findActiveBotName(client, botName, platform).then((val) => {
       if (val == -1) {
         tools.MarkBotAsRunning(client, botName, { status: 'on', platform: platform, brains: brainFile });
 
         // initialize rivescript bot 
         bot = new RiveScript();
-        bot.loadFile("brain/" + brain).then(launchOnDiscord(botname)).catch(error_handler);
+        bot.loadFile("brain/" + brainFile).then(launchOnDiscord(botName)).catch(error_handler);
       }
       else {
         console.log("Bot already running");
@@ -150,35 +152,35 @@ app.post('/', function (req, res) {
 
 })
 
-function launchOnDiscord(name) {
-  const TOKEN = "ODUwMzExNjgxMzA0ODIxNzcw.YLn4dg.n3jpzYAA9cknpFNXrif34lJ5qjE";
+async function launchOnDiscord(name) {
 
   // require the discord.js module
   const Discord = require('discord.js');
+  const config = require("./config.json");
 
   // create a new Discord client
   const clientDiscord = new Discord.Client();
 
   // set bot name
-  client.user.setUsername(name);
+  //client.user.setUsername(name);  // try to see it works
 
   // when the client is ready, run this code
   // this event will only trigger one time after logging in
   clientDiscord.once('ready', () => {
-    console.log("Bot launched");
+    console.log("Bot ready on Discord");
   });
 
   // read messages sent by the user and reply to them
-  client.on('message', message => {
-
-    // print message sent by user
-    console.log(message.content);
+  clientDiscord.on('message', message => {
+    if (message.author.bot) return;
 
     // get name of the other username
     var UserName = message.author.username;
     var UserMsg = message.content;
 
     //generate reply by bot
+	  bot.sortReplies();
+
     bot.reply(UserName, UserMsg).then(function(reply) {
       console.log("The bot says: " + reply);
       message.channel.send(reply);
@@ -187,9 +189,8 @@ function launchOnDiscord(name) {
 
 
   // login to Discord with your app's token
-  clientDiscord.login(TOKEN);
+  clientDiscord.login(config.BOT_TOKEN);
 }
-
 
 
 function error_handler (loadcount, err) {
