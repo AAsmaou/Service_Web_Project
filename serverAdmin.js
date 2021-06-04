@@ -102,7 +102,10 @@ app.post('/', function (req, res) {
       });
     });
   }
-  // launch on Discord
+
+  //********************************
+  //********** DISCORD *************
+  //********************************
   else if (platform == "Discord") {
 
     tools.findActiveBotName(client, botName).then((val) => {
