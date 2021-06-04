@@ -27,6 +27,9 @@ var fs = require('fs');
 var files = fs.readdirSync('./brain');
 console.log(files);
 
+// initialize bot rivescript for launching on Discord later
+const RiveScript = require('rivescript');
+var bot = new RiveScript();
 
 
 // RENDER HOME PAGE FOR ADMIN
@@ -69,7 +72,9 @@ app.post('/', function (req, res) {
   var BotOnDiscord = [];
   var bots = [];
 
-  // launch on web
+  //********************************
+  //********** BROWSER *************
+  //********************************
   // check if botName is already running
   if (platform == "Browser") {
     tools.findActiveBotName(client, botName).then((val) => {
@@ -111,23 +116,10 @@ app.post('/', function (req, res) {
     tools.findActiveBotName(client, botName).then((val) => {
       if (val == -1) {
         tools.MarkBotAsRunning(client, botName, { status: 'on', platform: platform, brains: brainFile });
-        const TOKEN = "ODUwMzExNjgxMzA0ODIxNzcw.YLn4dg.n3jpzYAA9cknpFNXrif34lJ5qjE";
 
-        // require the discord.js module
-        const Discord = require('discord.js');
-
-        // create a new Discord client
-        const clientDiscord = new Discord.Client();
-
-        // when the client is ready, run this code
-        // this event will only trigger one time after logging in
-        clientDiscord.once('ready', () => {
-          console.log('Ready!');
-        });
-
-        // login to Discord with your app's token
-        clientDiscord.login(TOKEN);
-        console.log("Bot launched");
+        // initialize rivescript bot 
+        bot = new RiveScript();
+        bot.loadFile("brain/" + brain).then(launchOnDiscord(botname)).catch(error_handler);
       }
       else {
         console.log("Bot already running");
@@ -157,6 +149,51 @@ app.post('/', function (req, res) {
   }
 
 })
+
+function launchOnDiscord(name) {
+  const TOKEN = "ODUwMzExNjgxMzA0ODIxNzcw.YLn4dg.n3jpzYAA9cknpFNXrif34lJ5qjE";
+
+  // require the discord.js module
+  const Discord = require('discord.js');
+
+  // create a new Discord client
+  const clientDiscord = new Discord.Client();
+
+  // when the client is ready, run this code
+  // this event will only trigger one time after logging in
+  clientDiscord.once('ready', () => {
+    console.log("Bot launched");
+  });
+
+  // read messages sent by the user and reply to them
+  client.on('message', message => {
+
+    // print message sent by user
+    console.log(message.content);
+
+    // get name of the other username
+    var UserName = message.author.username;
+    var UserMsg = message.content;
+
+    //generate reply by bot
+    bot.reply(UserName, UserMsg).then(function(reply) {
+      console.log("The bot says: " + reply);
+      message.channel.send(reply);
+    });
+  });
+
+
+  // login to Discord with your app's token
+  clientDiscord.login(TOKEN);
+}
+
+
+
+function error_handler (loadcount, err) {
+	console.log("Error loading batch #" + loadcount + ": " + err + "\n");
+}
+
+
 
 // listen Admin service
 app.listen(port, () => {
