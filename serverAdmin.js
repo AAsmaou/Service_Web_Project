@@ -89,25 +89,7 @@ app.post('/', function (req, res) {
         console.log("Bot already running");
       }
       // update interface 
-      // update bots running on Discord
-      tools.findActiveBot(client, 'Discord').then((val) => {
-        if (val == -1) {
-          BotOnDiscord = -1;
-        }
-        else {
-          BotOnDiscord = val;
-        }
-        // find all bots
-        tools.findBots(client).then((val) => {
-          if (val == -1) {
-            bots = -1;
-          }
-          else {
-            bots = val;
-          }
-          res.render('admin', { results: bots, filelist: files, DiscordBot: BotOnDiscord });
-        });
-      });
+      res.redirect('http://localhost:3001');
     });
   }
 
@@ -128,25 +110,7 @@ app.post('/', function (req, res) {
         console.log("Bot already running");
       }
       // update interface 
-      // update bots running on Discord
-      tools.findActiveBot(client, 'Discord').then((val) => {
-        if (val == -1) {
-          BotOnDiscord = -1;
-        }
-        else {
-          BotOnDiscord = val;
-        }
-        // find all bots
-        tools.findBots(client).then((val) => {
-          if (val == -1) {
-            bots = -1;
-          }
-          else {
-            bots = val;
-          }
-          res.render('admin', { results: bots, filelist: files, DiscordBot: BotOnDiscord });
-        });
-      });
+      res.redirect('http://localhost:3001');
     });
 
   }
@@ -216,9 +180,8 @@ app.delete('/remove', function (req, res) {
     if (val != -1) {  // if bot has really running on Discord, then disconnect it
 
       // disconnect bot
-      
       if (clientDiscord.user.username == botName) {
-        
+
         clientDiscord.destroy();
 
         console.log(botName + " has been disconnected from Discord");
