@@ -3,8 +3,8 @@
 //########################################
 
 
-// SET bot as running
-  async function MarkBotAsRunning(client, nameOfListing, updatedListing) {
+// update status bot
+  async function UpdateStatus(client, nameOfListing, updatedListing) {
 
     const result = await client.db("test").collection("bots").updateOne({ name: nameOfListing }, { $set: updatedListing });
 
@@ -14,17 +14,6 @@
 
 }
 
-// SET bot as stopped
-// eg : tools.MarkBotAsStopped(client, "Steeve", {status: 'off'}, {platform: 'Web'});
-async function MarkBotAsStopped(client, nameOfListing, updatedListing, removeListing) {
-
-  const result = await client.db("test").collection("bots").updateOne({ name: nameOfListing }, { $set: updatedListing, $unset: removeListing });
-
-  console.log(`${result.matchedCount} document(s) matched the query criteria.`);
-
-  console.log(`${result.modifiedCount} document(s) was/were updated.`);
-
-}
 
 // FIND active bots on a specific platform
 // sort _id = 1 impose a ascendind order --> at the top the ones added most recently
@@ -168,4 +157,4 @@ async function DatabaseConnectionClose(client) {
 }
 
 // exports functions
-module.exports = { findBots, findBotName, findActiveBot, findActiveBotName, findOneListingByName, DatabaseConnectionOpen, DatabaseConnectionClose, MarkBotAsRunning, MarkBotAsStopped };
+module.exports = { findBots, findBotName, findActiveBot, findActiveBotName, findOneListingByName, DatabaseConnectionOpen, DatabaseConnectionClose, UpdateStatus };

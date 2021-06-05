@@ -81,7 +81,7 @@
 					<h4 class="modal-title centeralign" id="chatModalLabel">Disconnect bot from Discord</h4>
 				</div>
 				<div class="modal-body">
-					<form method="post" class='optionsCreate'>
+					<form method="post" class='optionsCreate' id = "disableBot" action="/remove?_method=DELETE">
 						<div class="delete">
 							<fieldset>
 								<p>
@@ -122,7 +122,7 @@
 						<% if(results==-1) { %>
 							<li>
 								<span class="bot">
-								No bots found
+									No bots found
 								</span>
 							</li>
 							<% } else { %>
@@ -130,22 +130,22 @@
 									<p>
 										<li>
 											<span class="bot">
-											<%= bot.name %>
+												<%= bot.name %>
 											</span>
 											<span class="dots">:</span>
-												<% if(bot.status=="on" ) { %>
-													<span class="circle">
-														<i style="color:green" class="fas fa-dot-circle"></i>
-													</span>
-													<span class="run">
+											<% if(bot.status=="on" ) { %>
+												<span class="circle">
+													<i style="color:green" class="fas fa-dot-circle"></i>
+												</span>
+												<span class="run">
 													RUNNING on <%= bot.platform %>
 												</span>
-													<% } else { %>
-														<span class="circle">
-															<i style="color:red" class="fas fa-dot-circle"></i>
-														</span>
-														<span class="stop">STOPPED</span>
-														<% } %>
+												<% } else { %>
+													<span class="circle">
+														<i style="color:red" class="fas fa-dot-circle"></i>
+													</span>
+													<span class="stop">STOPPED</span>
+													<% } %>
 										</li>
 									</p>
 									<% }); %>

@@ -25,10 +25,10 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 // collect names of the brain for the bots
 var fs = require('fs');
 var files = fs.readdirSync('./brain');
-console.log(files);
 
 // initialize bot rivescript for launching on Discord later
 const RiveScript = require('rivescript');
+const { render } = require('ejs');
 var bot = new RiveScript();
 
 
@@ -60,17 +60,18 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/removeBot', (req, res) => {
+  res.redirect('http://localhost:3001');
+});
+
 
 // LAUNCH BOT
 //use case: select the name of the bot from a list and send it to the chatroom
 app.post('/', function (req, res) {
   // Send Name Chatbot
-  var botName = req.body.BotName; //just for developing
-  console.log("bot to launch: " + botName);
+  var botName = req.body.BotName;
   var platform = req.body.interface;
-  console.log("interface: " + platform);
   var brainFile = req.body.brain;
-  console.log(brainFile);
   var BotOnDiscord = [];
   var bots = [];
 
@@ -81,7 +82,7 @@ app.post('/', function (req, res) {
   if (platform == "Browser") {
     tools.findActiveBotName(client, botName, platform).then((val) => {
       if (val == -1) {
-        tools.MarkBotAsRunning(client, botName, { status: 'on', platform: platform, brains: brainFile });
+        tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: brainFile });
         console.log("Bot launched");
       }
       else {
@@ -117,7 +118,7 @@ app.post('/', function (req, res) {
 
     tools.findActiveBotName(client, botName, platform).then((val) => {
       if (val == -1) {
-        tools.MarkBotAsRunning(client, botName, { status: 'on', platform: platform, brains: brainFile });
+        tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: brainFile });
 
         // initialize rivescript bot 
         bot = new RiveScript();
@@ -152,18 +153,19 @@ app.post('/', function (req, res) {
 
 })
 
+// require the discord.js module
+const Discord = require('discord.js');
+
+// create a new Discord client
+const clientDiscord = new Discord.Client();
 
 // URL for connecting bot to your server: https://discord.com/api/oauth2/authorize?client_id=850311681304821770&permissions=8&scope=bot
 async function launchOnDiscord(name) {
-
-  // require the discord.js module
-  const Discord = require('discord.js');
+  
   const config = require("./config.json");
 
-  // create a new Discord client
-  const clientDiscord = new Discord.Client();
 
-    // try to see it works
+  // try to see it works
 
   // when the client is ready, run this code
   // this event will only trigger one time after logging in
@@ -182,9 +184,9 @@ async function launchOnDiscord(name) {
     var UserMsg = message.content;
 
     //generate reply by bot
-	  bot.sortReplies();
+    bot.sortReplies();
 
-    bot.reply(UserName, UserMsg).then(function(reply) {
+    bot.reply(UserName, UserMsg).then(function (reply) {
       console.log("The bot says: " + reply);
       message.channel.send(reply);
     });
@@ -196,11 +198,40 @@ async function launchOnDiscord(name) {
 }
 
 
-function error_handler (loadcount, err) {
-	console.log("Error loading batch #" + loadcount + ": " + err + "\n");
+function error_handler(loadcount, err) {
+  console.log("Error loading batch #" + loadcount + ": " + err + "\n");
 }
 
+// DISABLE BOT FROM DISCORD
+var methodOverride = require('method-override')
 
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method', ['DELETE']))
+
+
+app.delete('/remove', function (req, res) {
+  var botName = req.body.BotName;
+
+  tools.findActiveBotName(client, botName, "Discord").then((val) => {
+    if (val != -1) {  // if bot has really running on Discord, then disconnect it
+
+      // disconnect bot
+      
+      if (clientDiscord.user.username == botName) {
+        
+        clientDiscord.destroy();
+
+        console.log(botName + " has been disconnected from Discord");
+      }
+
+      tools.UpdateStatus(client, botName, { status: 'off', platform: 'Discord', brains: "null" });
+    }
+    else {
+      console.log("Bot not running on Discord");
+    }
+    res.redirect('http://localhost:3001');
+  });
+})
 
 // listen Admin service
 app.listen(port, () => {
