@@ -39,11 +39,8 @@ tools.DatabaseConnectionOpen(client).catch(console.error);
 const RiveScript = require('rivescript');
 var bot = new RiveScript();
 
-
 var robot;
 let userName;
-
-
 
 //**************************************************/
 //************ GET: DISPLAY CHATROOM ***************/ 

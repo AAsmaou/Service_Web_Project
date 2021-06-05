@@ -191,21 +191,40 @@
 
 // macro for storing stuff about users in the database
 
-> object store(field, value) javascript
-const user = require('./DatabaseUtility');
 
-console.log("Funziona");
+> object store javascript
 
+const {MongoClient} = require('mongodb');
+const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {useUnifiedTopology: true});
+
+  try {
+    // Connect to the MongoDB cluster
+    await client.connect();
+
+    console.log("DATABASE CONNECTED SUCCESSFULLY");
+
+  } catch (e) {
+    console.error(e);
+  }
+
+const result = await client.db("test").collection("users").updateOne({username: "user2"}, { $set: {colour: arguments[1]}});
+
+console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+
+console.log(`${result.modifiedCount} document(s) was/were updated.`);
+
+
+return ;
 
 < object
-
 
 
 // Learn stuff about our users.
 
 + my name is *
-- <set name=<formal>>Nice to meet you, <get name> <call>myip</call>
-- <set name=<formal>><get name>, nice to meet you.
+- <set name=<formal>>Nice to meet you, <get name> <call>store "<get name>"</call>
+- <set name=<formal>><get name>, nice to meet you. <call>store "<get name>"</call>
 
 + my name is <bot master>
 - <set name=<bot master>>That's my master's name too.
