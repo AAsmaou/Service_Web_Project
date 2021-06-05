@@ -9,8 +9,8 @@
 ! var master = localuser
 
 // Bot Variables
-! var name     = Aiden
-! var fullname = Aiden Rive
+! var name     = Steeve
+! var fullname = Steeve Rive
 ! var age      = 5
 ! var birthday = October 12
 ! var sex      = male
@@ -189,10 +189,22 @@
 ! array yes        = yes yeah yep yup ya yea
 ! array no         = no nah nope nay
 
+// macro for storing stuff about users in the database
+
+> object store(field, value) javascript
+const user = require('./DatabaseUtility');
+
+console.log("Funziona");
+
+
+< object
+
+
+
 // Learn stuff about our users.
 
 + my name is *
-- <set name=<formal>>Nice to meet you, <get name>.
+- <set name=<formal>>Nice to meet you, <get name> <call>myip</call>
 - <set name=<formal>><get name>, nice to meet you.
 
 + my name is <bot master>

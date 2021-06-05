@@ -110,7 +110,7 @@ app.post('/', function (req, res) {
         console.log("Bot already running");
       }
       // update interface 
-      res.redirect('http://localhost:${port}');
+      res.redirect('http://localhost:' + port);
     });
   }
 
@@ -131,7 +131,7 @@ app.post('/', function (req, res) {
         console.log("Bot already running");
       }
       // update interface 
-      res.redirect('http://localhost:${port}');
+      res.redirect('http://localhost:' + port);
     });
 
   }
@@ -220,7 +220,7 @@ app.delete('/remove', function (req, res) {
     else {
       console.log("Bot not running on Discord");
     }
-    res.redirect('http://localhost:${port}');
+    res.redirect('http://localhost:' + port);
   });
 })
 
@@ -255,5 +255,5 @@ app.put('/upload', function (req, res) {
 
   })
 
-  res.redirect('http://localhost:${port}');
+  res.redirect('http://localhost:' + port);
 })
