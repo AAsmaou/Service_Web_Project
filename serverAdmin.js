@@ -1,6 +1,8 @@
 console.log("Server inialization... ");
 
-// DATABASE UTILITIES
+//**************************************************/
+//************ DATABASE CONNECTION ****************/ 
+//**************************************************/
 var tools = require('./model/DatabaseUtility');
 
 // establish database connection
@@ -9,11 +11,14 @@ const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstData
 const client = new MongoClient(uri, { useUnifiedTopology: true });
 tools.DatabaseConnectionOpen(client).catch(console.error);
 
-//CREATE THE EXPRESS APP FOR CHATBOX MANAGEMENT (ADMIN PAGE)
+
+//**************************************************/
+//************ INITIALIZE APP **********************/ 
+//**************************************************/
+
 const express = require('express')
 const app = express()
 const port = 3001
-
 
 //set the view engine as ejs
 app.set('view engine', 'ejs');
@@ -22,17 +27,30 @@ app.use(express.static("public"));
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-// collect the names of the brain for the bots
+// listen Admin service
+app.listen(port, () => {
+  console.log(`AdminService listening at http://localhost:${port}`)
+})
+
+//********************************************************/
+//************ RETRIEVE .rive FILES **********************/ 
+//********************************************************/
+
 var fs = require('fs');
 var files = fs.readdirSync('./brain');
 
-// initialize bot rivescript for launching on Discord later
+//**************************************************/
+//********** RIVESCRIPT INITIALIZATION *************/ 
+//**************************************************/
 const RiveScript = require('rivescript');
-const { render } = require('ejs');
 var bot = new RiveScript();
 
 
-// RENDER HOME PAGE FOR ADMIN
+
+//**********************************************************/
+//************ GET: DISPLAY ADMIN INTERFACE ***************/ 
+//*********************************************************/
+
 app.get('/', (req, res) => {
 
   var BotOnDiscord = [];
@@ -60,12 +78,11 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/removeBot', (req, res) => {
-  res.redirect('http://localhost:3001');
-});
 
+//*********************************************************************/
+//************ POST: LAUNCH BOTS on Discord or Browser ***************/ 
+//*********************************************************************/
 
-// LAUNCH BOT
 //use case: select the name of the bot from a list and send it to the chatroom
 app.post('/', function (req, res) {
   // Send Name Chatbot
@@ -73,28 +90,33 @@ app.post('/', function (req, res) {
   var platform = req.body.interface;
   var brainFile = req.body.brain;
 
-
   //********************************
   //********** BROWSER *************
   //********************************
+  // Launch bot on the browser. 
+  //We set up the bot as launched on the database. The bot is launched in the serverBot.js after checking it has been initialized as launched on the database
+
+
   // check if botName is already running
   if (platform == "Browser") {
     tools.findActiveBotName(client, botName, platform).then((val) => {
       if (val == -1) {
+
         tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: brainFile });
         console.log("Bot launched");
+
       }
       else {
         console.log("Bot already running");
       }
       // update interface 
-      res.redirect('http://localhost:3001');
+      res.redirect('http://localhost:${port}');
     });
   }
 
-  //********************************
-  //********** DISCORD *************
-  //********************************
+  //*********************************************************
+  //********** LAUNCH BOT ON DISCORD ************************
+  //*********************************************************
   else if (platform == "Discord") {
 
     tools.findActiveBotName(client, botName, platform).then((val) => {
@@ -109,7 +131,7 @@ app.post('/', function (req, res) {
         console.log("Bot already running");
       }
       // update interface 
-      res.redirect('http://localhost:3001');
+      res.redirect('http://localhost:${port}');
     });
 
   }
@@ -127,7 +149,6 @@ async function launchOnDiscord(name) {
   
   const config = require("./config.json");
 
-
   // try to see it works
 
   // when the client is ready, run this code
@@ -140,7 +161,7 @@ async function launchOnDiscord(name) {
 
   // read messages sent by the user and reply to them
   clientDiscord.on('message', message => {
-    if (message.author.bot) return;
+    if (!message.author.bot) {   // To avoid the bot replies to himself
 
     // get name of the other username
     var UserName = message.author.username;
@@ -153,6 +174,7 @@ async function launchOnDiscord(name) {
       console.log("The bot says: " + reply);
       message.channel.send(reply);
     });
+  }
   });
 
 
@@ -161,11 +183,18 @@ async function launchOnDiscord(name) {
 }
 
 
+//******************************************/
+//******** UTILITY FOR LOADING BRAIN *******/ 
+//******************************************/
+
 function error_handler(loadcount, err) {
   console.log("Error loading batch #" + loadcount + ": " + err + "\n");
 }
 
-// DISABLE BOT FROM DISCORD
+
+//******************************************/
+//******** DISABLE BOT FROM DISCORD *******/ 
+//******************************************/
 var methodOverride = require('method-override')
 
 // override with POST having ?_method=DELETE
@@ -191,10 +220,18 @@ app.delete('/remove', function (req, res) {
     else {
       console.log("Bot not running on Discord");
     }
-    res.redirect('http://localhost:3001');
+    res.redirect('http://localhost:${port}');
   });
 })
 
+
+
+//******************************************/
+//******** UPLOAD NEW BRAIN ***************/ 
+//******************************************/
+
+// Here we set the new brain in the database.
+// The update of the bot with the new brains is carried out in the serverBot.js
 
 app.use(methodOverride('_method', ['PUT']))
 
@@ -216,16 +253,7 @@ app.put('/upload', function (req, res) {
 
     tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: listBrains }); // add new brain in the DBB
 
-    // Update the bot with the new brains on the platform (ONLY FOR BROWSER INTERFACE)
-
-    
-
   })
 
-  res.redirect('http://localhost:3001');
-})
-
-// listen Admin service
-app.listen(port, () => {
-  console.log(`AdminService listening at http://localhost:${port}`)
+  res.redirect('http://localhost:${port}');
 })

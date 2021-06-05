@@ -1,41 +1,57 @@
 console.log("Server inialization... ");
 
-//CREATE THE EXPRESS APP
+//**************************************************/
+//************ INITIALIZE APP **********************/ 
+//**************************************************/
 const express = require('express')
 const appBot = express();
 
 portBot = 3002;
 
-	// Parse application/json inputs.
-	appBot.set('view engine', 'ejs');
-  appBot.set('views', './views');
-  appBot.use(express.static("public"));
+// Parse application/json inputs.
+appBot.set('view engine', 'ejs');
+appBot.set('views', './views');
+appBot.use(express.static("public"));
 
-  // listen Chatbot service
-  const server = appBot.listen(portBot, () => {
+// listen Chatbot service
+const server = appBot.listen(portBot, () => {
   console.log(`BotService listening at http://localhost:${portBot}/chatbot`)
-  });
+});
 
-// DATABASE UTILITIES
+
+//**************************************************/
+//************ DATABASE CONNECTION ****************/ 
+//**************************************************/
+
 var tools = require('./model/DatabaseUtility');
 
 // establish database connection
-const {MongoClient} = require('mongodb');
+const { MongoClient } = require('mongodb');
 const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(uri, {useUnifiedTopology: true});
+const client = new MongoClient(uri, { useUnifiedTopology: true });
 tools.DatabaseConnectionOpen(client).catch(console.error);
 
-const RiveScript = require('rivescript') ;
+
+//**************************************************/
+//********** RIVESCRIPT INITIALIZATION *************/ 
+//**************************************************/
+
+const RiveScript = require('rivescript');
 var bot = new RiveScript();
+
+
 var robot;
+let userName;
 
 
-let userName = '';
 
-// Render home page chatbot
+//**************************************************/
+//************ GET: DISPLAY CHATROOM ***************/ 
+//**************************************************/
+
 appBot.get('/chatbot', (req, res) => {
   userName = req.query.user;
-  if (typeof userName == 'undefined'){
+  if (typeof userName == 'undefined') {
     res.redirect('http://localhost:3000'); //redirect to the login page
     console.log('Cannot access without loging in first')
   }
@@ -48,9 +64,9 @@ appBot.get('/chatbot', (req, res) => {
     // set the name of the bot for the chat and the brain used
     // ASSUMPTION: we pick the last bots launched on the web platform if more exists
     tools.findActiveBot(client, 'Browser').then((val) => {
-      
-      if (val != -1){
-        
+
+      if (val != -1) {
+
         val.forEach((result) => {
 
           robot = result.name;
@@ -59,29 +75,26 @@ appBot.get('/chatbot', (req, res) => {
 
         });
         console.log(robot);
-        
+
       }
-      else{
+      else {
         robot = "noRobot";
-      }}
+      }
+    }
     );
-
-    // load all the brain files
-    //var filelist = "brain/" + brains[0] ;  
-
-    //for (let index = 1; index < brains.length; index++) {
-      //filelist = filelist + "," + "brain/" + brains[index];
-      //console.log(filelist);  
-  //}
   }
 })
 
 
+//**************************************************/
+//***************** RUN BOT  ***********************/ 
+//**************************************************/
+
 function success_handler() {
-	console.log("Brain loaded!");
+  console.log("Brain loaded!");
 
   // Now the replies must be sorted!
-	bot.sortReplies();
+  bot.sortReplies();
 
 
   const io = require('socket.io')(server);
@@ -91,12 +104,12 @@ function success_handler() {
   io.on('connection', (socket) => {
 
     // welcome message from robot
-    if (robot == "noRobot"){
+    if (robot == "noRobot") {
       console.log('No active bots on Browser platform!');
-      socket.emit('bot message', {botName: 'ERROR', botmessage: "No bots running on the Server at the moment!"});
+      socket.emit('bot message', { botName: 'ERROR', botmessage: "No bots running on the Server at the moment!" });
     }
-    else{
-    socket.emit('bot message', {botName: robot, botmessage: "Hello :) How are you going?"});
+    else {
+      socket.emit('bot message', { botName: robot, botmessage: "Hello :) How are you going?" });
     }
     // when the client emits 'new message', this listens and executes
     socket.on('new message', (data) => {
@@ -106,9 +119,9 @@ function success_handler() {
       UserMsg = data;
 
       //generate reply by bot
-      bot.reply(UserName, UserMsg).then(function(reply) {
+      bot.reply(UserName, UserMsg).then(function (reply) {
         console.log("The bot says: " + reply);
-        socket.emit('bot message', {botName: robot, botmessage: reply});
+        socket.emit('bot message', { botName: robot, botmessage: reply });
       });
 
       // we tell the client to execute 'new message'
@@ -146,26 +159,27 @@ function success_handler() {
     // when the user disconnects.. perform this
     socket.on('disconnect', () => {
 
-        // echo globally that this client has left
-        socket.broadcast.emit('user left', {
-          username: socket.username
-        });
+      // echo globally that this client has left
+      socket.broadcast.emit('user left', {
+        username: socket.username
+      });
     });
   });
 
+  // CHECKS IF TO UPDATE THE BRAIN
   updateBrain(robot, "Browser");
 }
 
-function error_handler (loadcount, err) {
-	console.log("Error loading batch #" + loadcount + ": " + err + "\n");
-}
 
+//******************************************/
+//************ UPDATE BRAINS ***************/ 
+//******************************************/
 
-async function updateBrain(botname, platform){
-  
+async function updateBrain(botname, platform) {
+
   // set up filter for looking for changes
   const pipeline = [
-    { $match: {'operationType': 'update', 'fullDocument.name': botname, 'fullDocument.status': 'on', 'fullDocument.platform': platform} }
+    { $match: { 'operationType': 'update', 'fullDocument.name': botname, 'fullDocument.status': 'on', 'fullDocument.platform': platform } }
   ];
 
   // set options: updateLookup means to return all the fields of the updated document
@@ -181,14 +195,23 @@ async function updateBrain(botname, platform){
 
     for (let index = 0; index < brainList.length; index++) {
       bot.loadFile("brain/" + brainList[index]).then(BrainUploadSuccess(brainList[index])).catch(error_handler);
-  }
+    }
 
-  bot.sortReplies();
+    bot.sortReplies();
 
   });
-} 
+}
 
 
-function BrainUploadSuccess (file) {
-	console.log("Brain " + file + " successfully uploaded and running!");
+//*****************************************************************/
+//************ UTILITIES FOR LOADING OF THE BRAINS ***************/ 
+//****************************************************************/
+
+function BrainUploadSuccess(file) {
+  console.log("Brain " + file + " successfully uploaded and running!");
+}
+
+
+function error_handler(loadcount, err) {
+  console.log("Error loading batch #" + loadcount + ": " + err + "\n");
 }
