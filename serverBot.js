@@ -92,7 +92,7 @@ function success_handler() {
 
     // welcome message from robot
     if (robot == "noRobot"){
-      console.log('No active bots on Web platform!');
+      console.log('No active bots on Browser platform!');
       socket.emit('bot message', {botName: 'ERROR', botmessage: "No bots running on the Server at the moment!"});
     }
     else{
@@ -152,8 +152,43 @@ function success_handler() {
         });
     });
   });
+
+  updateBrain(robot, "Browser");
 }
 
 function error_handler (loadcount, err) {
 	console.log("Error loading batch #" + loadcount + ": " + err + "\n");
+}
+
+
+async function updateBrain(botname, platform){
+  
+  // set up filter for looking for changes
+  const pipeline = [
+    { $match: {'operationType': 'update', 'fullDocument.name': botname, 'fullDocument.status': 'on', 'fullDocument.platform': platform} }
+  ];
+
+  // set options: updateLookup means to return all the fields of the updated document
+  var options = { fullDocument: 'updateLookup' };
+
+  // check for changes in the databases
+  const changeStream = client.db("test").collection("bots").watch(pipeline, options);
+
+  changeStream.on('change', data => {
+
+    // load all the brain files
+    const brainList = data.fullDocument.brains;
+
+    for (let index = 0; index < brainList.length; index++) {
+      bot.loadFile("brain/" + brainList[index]).then(BrainUploadSuccess(brainList[index])).catch(error_handler);
+  }
+
+  bot.sortReplies();
+
+  });
+} 
+
+
+function BrainUploadSuccess (file) {
+	console.log("Brain " + file + " successfully uploaded and running!");
 }

@@ -22,7 +22,7 @@ app.use(express.static("public"));
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-// collect names of the brain for the bots
+// collect the names of the brain for the bots
 var fs = require('fs');
 var files = fs.readdirSync('./brain');
 
@@ -72,8 +72,7 @@ app.post('/', function (req, res) {
   var botName = req.body.BotName;
   var platform = req.body.interface;
   var brainFile = req.body.brain;
-  var BotOnDiscord = [];
-  var bots = [];
+
 
   //********************************
   //********** BROWSER *************
@@ -177,7 +176,7 @@ app.delete('/remove', function (req, res) {
   var botName = req.body.BotName;
 
   tools.findActiveBotName(client, botName, "Discord").then((val) => {
-    if (val != -1) {  // if bot has really running on Discord, then disconnect it
+    if (val != -1) {  // if bot is really running on Discord, then disconnect it
 
       // disconnect bot
       if (clientDiscord.user.username == botName) {
@@ -194,6 +193,36 @@ app.delete('/remove', function (req, res) {
     }
     res.redirect('http://localhost:3001');
   });
+})
+
+
+app.use(methodOverride('_method', ['PUT']))
+
+app.put('/upload', function (req, res) {
+  var botName = req.body.BotName;
+  console.log(botName)
+  var platform = req.body.interface;
+  console.log(platform)
+  var newBrain = req.body.brain;
+
+  var listBrains = []; //array of brains
+
+  tools.findActiveBotName(client, botName, platform).then((val) => {
+    
+    var oldBrain = val[0].brains;
+    
+    listBrains.push(oldBrain);
+    listBrains.push(newBrain);  // now the listBrains is ready
+
+    tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: listBrains }); // add new brain in the DBB
+
+    // Update the bot with the new brains on the platform (ONLY FOR BROWSER INTERFACE)
+
+    
+
+  })
+
+  res.redirect('http://localhost:3001');
 })
 
 // listen Admin service

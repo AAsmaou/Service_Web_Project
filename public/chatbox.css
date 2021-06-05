@@ -295,3 +295,7 @@ legend {
     text-align: center;
     align-items: center
 }
+
+.btn-group{
+    display: block ruby;
+}

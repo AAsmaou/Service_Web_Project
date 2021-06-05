@@ -12,9 +12,35 @@
 	<link rel='stylesheet' href='chatbox.css' />
 	<link rel='stylesheet' href='font/all.css' />
 
+	<script>
+		function initializeUpdateForm(){
+			const interface = document.getElementById("interfaceSelector").value;
+			document.getElementById("interfaceU").value = interface;
+			const bot = document.getElementById("BotNameSelector").value;
+			document.getElementById("BotNameU").value = bot;
+			const brain = document.getElementById("brainSelector").value;
+			document.getElementById("brainU").value = brain;
+		}
+	
+		function interfaceSelected() {
+			const interface = document.getElementById("interfaceSelector").value;
+			document.getElementById("interfaceU").value = interface;
+		}
+
+		function botSelected() {
+			const bot = document.getElementById("BotNameSelector").value;
+			document.getElementById("BotNameU").value = bot;
+		}
+
+		function brainSelected() {
+			const brain = document.getElementById("brainSelector").value;
+			document.getElementById("brainU").value = brain;
+		}
+	</script>
+
 </head>
 
-<body>
+<body onload="initializeUpdateForm()">
 
 	<div class="modal-dialog center">
 		<div class="control-group">
@@ -28,7 +54,7 @@
 							<fieldset>
 								<p>
 									<label for="interface">Choose the interface:</label>
-									<select name="interface" id="interface">
+									<select name="interface" id="interfaceSelector" onchange="interfaceSelected()">
 										<option value="Browser">Browser</option>
 										<option value="Discord">Discord</option>
 									</select>
@@ -36,7 +62,7 @@
 								</p>
 								<p>
 									<label for="BotName">Choose the chatbot:</label>
-									<select name="BotName" id="BotName">
+									<select name="BotName" id="BotNameSelector" onchange="botSelected()">
 										<% if(results==-1) { %>
 											<option value='nobot'>
 												No bots running
@@ -53,7 +79,7 @@
 								</p>
 								<p>
 									<label for="interface">Choose the brain:</label>
-									<select name="brain" id="brain">
+									<select name="brain" id="brainSelector" onchange="brainSelected()">
 										<% filelist.forEach(function(filename) { %>
 											<option value=<%=filename%>>
 												<%= filename %>
@@ -64,112 +90,118 @@
 								</p>
 							</fieldset>
 						</div>
-						<div class="centeralign">
-							<input type="submit" value="Launch">
-							<!-- Update the brain -->
-							<input type="submit" value="Update">
-						</div>
+						<div class="centeralign btn-group">
+							<span><input type="submit" value="Launch"></span>
+					</form>
+					<!-- Update the brain -->
+					<form method="post" class='optionsCreate' action="/upload?_method=PUT">
+						<input id="BotNameU" name="BotName" type="hidden" value="None" />
+						<input id="interfaceU" name="interface" type="hidden" value="None" />
+						<input id="brainU" name="brain" type="hidden" value="None" />
+						<span><input type="submit" value="Update"></span>
 					</form>
 				</div>
-				<div class="modal-footer">
-					<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
-				</div>
-			</div>
 
-			<div class="remove">
-				<div class="modal-header">
-					<h4 class="modal-title centeralign" id="chatModalLabel">Disconnect bot from Discord</h4>
-				</div>
-				<div class="modal-body">
-					<form method="post" class='optionsCreate' id = "disableBot" action="/remove?_method=DELETE">
-						<div class="delete">
-							<fieldset>
-								<p>
-									<label for="BotName">Choose the chatbot:</label>
-									<select name="BotName" id="BotName">
-										<% if(DiscordBot==-1) { %>
-											<option value='nobot'>
-												no bots running on Discords
-											</option>
-											<% } else { %>
-												<% DiscordBot.forEach(function(bot) { %>
-													<option value=<%=bot.name %>>
-														<%= bot.name %>
-													</option>
-													<% }); %>
-														<% } %>
-									</select>
-									<br><br>
-								</p>
-							</fieldset>
-						</div>
-						<div class="centeralign">
-							<input style="margin-bottom: 60px;" type="submit" value="Disconnect">
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
-				</div>
-			</div>
-
-			<div class="status">
-				<div class="modal-header">
-					<h4 class="modal-title centeralign" id="chatModalLabel">Status Bots</h4>
-				</div>
-				<div class="modal-body">
-					<ul style="margin-bottom: 55px;" name="BotName" id="BotName">
-						<% if(results==-1) { %>
-							<li>
-								<span class="bot">
-									No bots found
-								</span>
-							</li>
-							<% } else { %>
-								<% results.forEach(function(bot) { %>
-									<p>
-										<li>
-											<span class="bot">
-												<%= bot.name %>
-											</span>
-											<span class="dots">:</span>
-											<% if(bot.status=="on" ) { %>
-												<span class="circle">
-													<i style="color:green" class="fas fa-dot-circle"></i>
-												</span>
-												<span class="run">
-													RUNNING on <%= bot.platform %>
-												</span>
-												<% } else { %>
-													<span class="circle">
-														<i style="color:red" class="fas fa-dot-circle"></i>
-													</span>
-													<span class="stop">STOPPED</span>
-													<% } %>
-										</li>
-									</p>
-									<% }); %>
-										<% } %>
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
-				</div>
-			</div>
-		</div>
-
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 class="modal-title" id="chatModalLabel">Dialogue</h4>
-			</div>
-			<div class="modal-body">
-				<div class="try-dialogue" id="dialogue">
-				</div>
 			</div>
 			<div class="modal-footer">
 				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
 			</div>
 		</div>
+
+		<div class="remove">
+			<div class="modal-header">
+				<h4 class="modal-title centeralign" id="chatModalLabel">Disconnect bot from Discord</h4>
+			</div>
+			<div class="modal-body">
+				<form method="post" class='optionsCreate' id="disableBot" action="/remove?_method=DELETE">
+					<div class="delete">
+						<fieldset>
+							<p>
+								<label for="BotName">Choose the chatbot:</label>
+								<select name="BotName" id="BotName">
+									<% if(DiscordBot==-1) { %>
+										<option value='nobot'>
+											no bots running on Discords
+										</option>
+										<% } else { %>
+											<% DiscordBot.forEach(function(bot) { %>
+												<option value=<%=bot.name %>>
+													<%= bot.name %>
+												</option>
+												<% }); %>
+													<% } %>
+								</select>
+								<br><br>
+							</p>
+						</fieldset>
+					</div>
+					<div class="centeralign">
+						<input style="margin-bottom: 60px;" type="submit" value="Disconnect">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
+			</div>
+		</div>
+
+		<div class="status">
+			<div class="modal-header">
+				<h4 class="modal-title centeralign" id="chatModalLabel">Status Bots</h4>
+			</div>
+			<div class="modal-body">
+				<ul style="margin-bottom: 55px;" name="BotName" id="BotName">
+					<% if(results==-1) { %>
+						<li>
+							<span class="bot">
+								No bots found
+							</span>
+						</li>
+						<% } else { %>
+							<% results.forEach(function(bot) { %>
+								<p>
+									<li>
+										<span class="bot">
+											<%= bot.name %>
+										</span>
+										<span class="dots">:</span>
+										<% if(bot.status=="on" ) { %>
+											<span class="circle">
+												<i style="color:green" class="fas fa-dot-circle"></i>
+											</span>
+											<span class="run">
+												RUNNING on <%= bot.platform %>
+											</span>
+											<% } else { %>
+												<span class="circle">
+													<i style="color:red" class="fas fa-dot-circle"></i>
+												</span>
+												<span class="stop">STOPPED</span>
+												<% } %>
+									</li>
+								</p>
+								<% }); %>
+									<% } %>
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
+			</div>
+		</div>
+	</div>
+
+	<div class="modal-content">
+		<div class="modal-header">
+			<h4 class="modal-title" id="chatModalLabel">Dialogue</h4>
+		</div>
+		<div class="modal-body">
+			<div class="try-dialogue" id="dialogue">
+			</div>
+		</div>
+		<div class="modal-footer">
+			<!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button> -->
+		</div>
+	</div>
 	</div>
 </body>
 
