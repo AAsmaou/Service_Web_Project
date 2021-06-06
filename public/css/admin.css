@@ -10,6 +10,13 @@ ul {
     list-style-type: none;
 }
 
+.username {
+    font-weight: 700;
+    overflow: hidden;
+    padding-right: 15px;
+    text-align: right;
+}
+
 .bot{
     display: inline-block;
     width: 50px;
@@ -188,7 +195,7 @@ button, input, optgroup, select, textarea {
     padding: 15px;
 }
 
-.try-dialogue {
+.messages {
     height: 150px;
     border: 1px solid #CCCCCC;
     padding: 10px;

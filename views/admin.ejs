@@ -9,11 +9,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- Css -->
-	<link rel='stylesheet' href='css/chatbox.css' />
+	<link rel='stylesheet' href='css/admin.css' />
 	<link rel='stylesheet' href='font/all.css' />
 
 	<script>
-		function initializeUpdateForm(){
+		function initializeUpdateForm() {
 			const interface = document.getElementById("interfaceSelector").value;
 			document.getElementById("interfaceU").value = interface;
 			const bot = document.getElementById("BotNameSelector").value;
@@ -21,7 +21,7 @@
 			const brain = document.getElementById("brainSelector").value;
 			document.getElementById("brainU").value = brain;
 		}
-	
+
 		function interfaceSelected() {
 			const interface = document.getElementById("interfaceSelector").value;
 			document.getElementById("interfaceU").value = interface;
@@ -196,6 +196,7 @@
 		</div>
 		<div class="modal-body">
 			<div class="try-dialogue" id="dialogue">
+				<ul class="messages"></ul>
 			</div>
 		</div>
 		<div class="modal-footer">
@@ -203,6 +204,10 @@
 		</div>
 	</div>
 	</div>
+
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src='lib/socket.io\client-dist\socket.io.js'></script>
+	<script src="lib/socketClientAdmin.js"></script>
 </body>
 
 </html>

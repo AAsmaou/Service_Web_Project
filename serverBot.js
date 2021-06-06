@@ -4,6 +4,7 @@ console.log("Server inialization... ");
 //************ INITIALIZE APP **********************/ 
 //**************************************************/
 const express = require('express')
+var cors = require('cors')
 const appBot = express();
 
 portBot = 3002;
@@ -12,6 +13,8 @@ portBot = 3002;
 appBot.set('view engine', 'ejs');
 appBot.set('views', './views');
 appBot.use(express.static("public"));
+
+appBot.use(cors())
 
 // listen Chatbot service
 const server = appBot.listen(portBot, () => {
@@ -103,7 +106,12 @@ function success_handler() {
   // TO DO: retrieve name of the user that logged in 
   tools.updateUser(client, "user2", {bot : robot});
 
-  const io = require('socket.io')(server);
+  const io = require('socket.io')(server, {
+    cors: {
+      origin: true,
+      methods: ["GET", "POST"]
+    }
+  });
 
   // Chatroom
 
@@ -126,8 +134,14 @@ function success_handler() {
 
       //generate reply by bot
       bot.reply(UserName, UserMsg).then(function (reply) {
+        
         //console.log("The bot says: " + reply);
         socket.emit('bot message', { botName: robot, botmessage: reply });
+
+        socket.broadcast.emit('bot message', {
+          botName: robot,
+          botmessage: reply
+        });
       });
 
       // we tell the client to execute 'new message'
