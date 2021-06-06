@@ -111,17 +111,31 @@ app.post('/', function (req, res) {
   // check if botName is already running
   if (platform == "Browser") {
     tools.findActiveBotName(client, botName, platform).then((val) => {
-      if (val == -1) {
 
-        tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: brainFile });
-        console.log("Bot launched");
+      tools.findActiveBot(client, platform).then((botsOnThePlatform) => { // list of all bots running on that platform ( it is always made of only one element)
 
-      }
-      else {
-        console.log("Bot already running");
-      }
-      // update interface 
-      res.redirect('http://localhost:' + port);
+        if (val == -1) {
+
+          // disable the last bot that was running
+          if (botsOnThePlatform.length > 0) {
+
+            const LastRunningBot = botsOnThePlatform[0].name;
+
+            tools.UpdateStatus(client, LastRunningBot, { status: 'off', platform: 'None', brains: 'null'});
+          }
+
+          // set new bot as launched
+          tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: brainFile });
+
+          console.log(botName + " launched on " + platform);
+
+        }
+        else {
+          console.log(botName + " already running");
+        }
+        // update interface 
+        res.redirect('http://localhost:' + port);
+      });
     });
   }
 
@@ -136,7 +150,7 @@ app.post('/', function (req, res) {
 
         // store in the database the name of the robot with whom the user is speaking
         // TO DO: retrieve the same name of the user on Discord
-        tools.updateUser(client, "user2", {bot : botName});
+        tools.updateUser(client, "user2", { bot: botName });
 
         // initialize rivescript bot 
         bot = new RiveScript();
@@ -155,35 +169,36 @@ app.post('/', function (req, res) {
 
 // URL for connecting bot to your server: https://discord.com/api/oauth2/authorize?client_id=850311681304821770&permissions=8&scope=bot
 async function launchOnDiscord(name) {
-  
-  const config = require("./config.json");
 
-  // try to see it works
+  const config = require("./config.json");
 
   // when the client is ready, run this code
   // this event will only trigger one time after logging in
   clientDiscord.once('ready', () => {
+
     // set bot name
     clientDiscord.user.setUsername(name);
+
     console.log("Bot ready on Discord");
   });
 
   // read messages sent by the user and reply to them
   clientDiscord.on('message', message => {
+
     if (!message.author.bot) {   // To avoid the bot replies to himself
 
-    // get name of the other username
-    var UserName = message.author.username;
-    var UserMsg = message.content;
+      // get name of the other username
+      var UserName = message.author.username;
+      var UserMsg = message.content;
 
-    //generate reply by bot
-    bot.sortReplies();
+      //generate reply by bot
+      bot.sortReplies();
 
-    bot.reply(UserName, UserMsg).then(function (reply) {
-      console.log("The bot says: " + reply);
-      message.channel.send(reply);
-    });
-  }
+      bot.reply(UserName, UserMsg).then(function (reply) {
+        console.log("The bot says: " + reply);
+        message.channel.send(reply);
+      });
+    }
   });
 
 
@@ -211,6 +226,7 @@ app.use(methodOverride('_method', ['DELETE']))
 
 
 app.delete('/remove', function (req, res) {
+  
   var botName = req.body.BotName;
 
   tools.findActiveBotName(client, botName, "Discord").then((val) => {
@@ -254,9 +270,9 @@ app.put('/upload', function (req, res) {
   var listBrains = []; //array of brains
 
   tools.findActiveBotName(client, botName, platform).then((val) => {
-    
+
     var oldBrain = val[0].brains;
-    
+
     listBrains.push(oldBrain);
     listBrains.push(newBrain);  // now the listBrains is ready
 
