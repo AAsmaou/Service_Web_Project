@@ -46,6 +46,17 @@ const RiveScript = require('rivescript');
 var bot = new RiveScript();
 
 
+//**************************************************/
+//************ DISCORD INITIALIZATION *************/ 
+//**************************************************/
+
+// require the discord.js module
+const Discord = require('discord.js');
+
+// create a new Discord client
+const clientDiscord = new Discord.Client();
+
+
 
 //**********************************************************/
 //************ GET: DISPLAY ADMIN INTERFACE ***************/ 
@@ -123,6 +134,10 @@ app.post('/', function (req, res) {
       if (val == -1) {
         tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: brainFile });
 
+        // store in the database the name of the robot with whom the user is speaking
+        // TO DO: retrieve the same name of the user on Discord
+        tools.updateUser(client, "user2", {bot : botName});
+
         // initialize rivescript bot 
         bot = new RiveScript();
         bot.loadFile("brain/" + brainFile).then(launchOnDiscord(botName)).catch(error_handler);
@@ -137,12 +152,6 @@ app.post('/', function (req, res) {
   }
 
 })
-
-// require the discord.js module
-const Discord = require('discord.js');
-
-// create a new Discord client
-const clientDiscord = new Discord.Client();
 
 // URL for connecting bot to your server: https://discord.com/api/oauth2/authorize?client_id=850311681304821770&permissions=8&scope=bot
 async function launchOnDiscord(name) {

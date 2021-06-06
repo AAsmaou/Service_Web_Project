@@ -97,7 +97,8 @@ function success_handler() {
   bot.sortReplies();
 
   // store in the database the name of the robot with whom the user is speaking
-  tools.updateUser(client, userName, {bot : robot});
+  // TO DO: retrieve name of the user that logged in 
+  tools.updateUser(client, "user2", {bot : robot});
 
   const io = require('socket.io')(server);
 
