@@ -15,6 +15,18 @@
 }
 
 
+// add name of the bot speaking with user
+async function updateUser(client, nameOfListing, updatedListing) {
+
+  const result = await client.db("test").collection("users").updateOne({ username: nameOfListing }, { $set: updatedListing });
+
+  console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+
+  console.log(`${result.modifiedCount} document(s) was/were updated.`);
+
+}
+
+
 // FIND active bots on a specific platform
 // sort _id = 1 impose a ascendind order --> at the top the ones added most recently
 async function findActiveBot(client, platform) {
@@ -157,4 +169,4 @@ async function DatabaseConnectionClose(client) {
 }
 
 // exports functions
-module.exports = { findBots, findBotName, findActiveBot, findActiveBotName, findOneListingByName, DatabaseConnectionOpen, DatabaseConnectionClose, UpdateStatus };
+module.exports = { findBots, findBotName, findActiveBot, findActiveBotName, findOneListingByName, DatabaseConnectionOpen, DatabaseConnectionClose, UpdateStatus, updateUser };

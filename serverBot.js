@@ -40,7 +40,9 @@ const RiveScript = require('rivescript');
 var bot = new RiveScript();
 
 var robot;
-let userName;
+var userName;
+
+
 
 //**************************************************/
 //************ GET: DISPLAY CHATROOM ***************/ 
@@ -54,7 +56,8 @@ appBot.get('/chatbot', (req, res) => {
   }
   else {
     res.render('chat');
-    console.log(userName);
+
+
 
     var brain;
 
@@ -68,10 +71,10 @@ appBot.get('/chatbot', (req, res) => {
 
           robot = result.name;
           brain = result.brains;
+          
           bot.loadFile("brain/" + brain).then(success_handler).catch(error_handler);
 
         });
-        console.log(robot);
 
       }
       else {
@@ -93,6 +96,8 @@ function success_handler() {
   // Now the replies must be sorted!
   bot.sortReplies();
 
+  // store in the database the name of the robot with whom the user is speaking
+  tools.updateUser(client, userName, {bot : robot});
 
   const io = require('socket.io')(server);
 

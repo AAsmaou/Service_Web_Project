@@ -25,6 +25,9 @@
 ! var author   = Stephen King
 ! var job      = robot
 ! var website  = www.rivescript.com
+! var username = username
+! var favcolour = favcolour
+! var ageuser = age
 
 // Substitutions
 ! sub &quot;    = "
@@ -192,14 +195,20 @@
 // macro for storing stuff about users in the database
 
 
-> object store javascript
+
+
+> object storeFirsName javascript
 
 const {MongoClient} = require('mongodb');
 const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {useUnifiedTopology: true});
 
+const botName = arguments[1][0];
+const firstname = arguments[1][1];
+ 
+// Connect to the MongoDB cluster
   try {
-    // Connect to the MongoDB cluster
+    
     await client.connect();
 
     console.log("DATABASE CONNECTED SUCCESSFULLY");
@@ -208,23 +217,192 @@ const client = new MongoClient(uri, {useUnifiedTopology: true});
     console.error(e);
   }
 
-const result = await client.db("test").collection("users").updateOne({username: "user2"}, { $set: {colour: arguments[1]}});
+
+// fetch name uf user
+var UserName;
+const cursor = await client.db("test").collection("users").find({ bot: botName});
+
+  var user = await cursor.toArray();
+
+  if (user.length > 0) {
+
+	UserName = user[0].username;
+    console.log(UserName + ` is speaking with ` + botName);
+
+  } else {
+
+    console.log(`No users are speaking with ` + botName);
+    user = -1;
+	return " ";
+
+  }
+
+const result = await client.db("test").collection("users").updateOne({username: UserName}, { $set: {firstname: firstname}});
 
 console.log(`${result.matchedCount} document(s) matched the query criteria.`);
 
 console.log(`${result.modifiedCount} document(s) was/were updated.`);
 
+return " ";
 
-return ;
+< object
+
+> object storeAge javascript
+
+const {MongoClient} = require('mongodb');
+const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {useUnifiedTopology: true});
+
+const botName = arguments[1][0];
+const age = arguments[1][1];
+ 
+// Connect to the MongoDB cluster
+  try {
+    
+    await client.connect();
+
+    console.log("DATABASE CONNECTED SUCCESSFULLY");
+
+  } catch (e) {
+    console.error(e);
+  }
+
+
+// fetch name uf user
+var UserName;
+const cursor = await client.db("test").collection("users").find({ bot: botName});
+
+  var user = await cursor.toArray();
+
+  if (user.length > 0) {
+
+	UserName = user[0].username;
+    console.log(UserName + ` is speaking with ` + botName);
+
+  } else {
+
+    console.log(`No users are speaking with ` + botName);
+    user = -1;
+	return " ";
+
+  }
+
+const result = await client.db("test").collection("users").updateOne({username: UserName}, { $set: {age: age}});
+
+console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+
+console.log(`${result.modifiedCount} document(s) was/were updated.`);
+
+return " ";
 
 < object
 
 
+> object storeLocation javascript
+
+const {MongoClient} = require('mongodb');
+const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {useUnifiedTopology: true});
+
+const botName = arguments[1][0];
+const location = arguments[1][1];
+ 
+// Connect to the MongoDB cluster
+  try {
+    
+    await client.connect();
+
+    console.log("DATABASE CONNECTED SUCCESSFULLY");
+
+  } catch (e) {
+    console.error(e);
+  }
+
+
+// fetch name uf user
+var UserName;
+const cursor = await client.db("test").collection("users").find({ bot: botName});
+
+  var user = await cursor.toArray();
+
+  if (user.length > 0) {
+
+	UserName = user[0].username;
+    console.log(UserName + ` is speaking with ` + botName);
+
+  } else {
+
+    console.log(`No users are speaking with ` + botName);
+    user = -1;
+	return " ";
+
+  }
+
+const result = await client.db("test").collection("users").updateOne({username: UserName}, { $set: {location: location}});
+
+console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+
+console.log(`${result.modifiedCount} document(s) was/were updated.`);
+
+return " ";
+
+< object
+
+> object storeNickname javascript
+
+const {MongoClient} = require('mongodb');
+const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {useUnifiedTopology: true});
+
+const botName = arguments[1][0];
+const nickname = arguments[1][1];
+ 
+// Connect to the MongoDB cluster
+  try {
+    
+    await client.connect();
+
+    console.log("DATABASE CONNECTED SUCCESSFULLY");
+
+  } catch (e) {
+    console.error(e);
+  }
+
+
+// fetch name uf user
+var UserName;
+const cursor = await client.db("test").collection("users").find({ bot: botName});
+
+  var user = await cursor.toArray();
+
+  if (user.length > 0) {
+
+	UserName = user[0].username;
+    console.log(UserName + ` is speaking with ` + botName);
+
+  } else {
+
+    console.log(`No users are speaking with ` + botName);
+    user = -1;
+	return " ";
+
+  }
+
+const result = await client.db("test").collection("users").updateOne({username: UserName}, { $set: {nickname: nickname}});
+
+console.log(`${result.matchedCount} document(s) matched the query criteria.`);
+
+console.log(`${result.modifiedCount} document(s) was/were updated.`);
+
+return " ";
+
+< object
+
 // Learn stuff about our users.
 
 + my name is *
-- <set name=<formal>>Nice to meet you, <get name> <call>store "<get name>"</call>
-- <set name=<formal>><get name>, nice to meet you. <call>store "<get name>"</call>
+- <set name=<formal>>Nice to meet you, <get name> <call>storeFirsName "<bot name>" "<get name>"</call>
+- <set name=<formal>><get name>, nice to meet you. <call>storeFirsName "<bot name>" "<get name>"</call>
 
 + my name is <bot master>
 - <set name=<bot master>>That's my master's name too.
@@ -234,11 +412,11 @@ return ;
 - <set name=<bot name>>That's my name too!
 
 + call me *
-- <set name=<formal>><get name>, I will call you that from now on.
+- <set nickname=<formal>><get nickname>, I will call you that from now on. <call>storeNickname "<bot name>" "<get nickname>"</call>
 
 + i am * years old
-- <set age=<star>>A lot of people are <get age>, you're not alone.
-- <set age=<star>>Cool, I'm <bot age> myself.{weight=49}
+- <set age=<star>>A lot of people are <get age>, you're not alone. <call>storeFirsName "<bot name>" "<get age>"</call>
+- <set age=<star>>Cool, I'm <bot age> myself. <call>storeFirsName "<bot name>" "<get age>"</call> {weight=49} 
 
 + i am a (@malenoun)
 - <set sex=male>Alright, you're a <star>.
@@ -247,7 +425,7 @@ return ;
 - <set sex=female>Alright, you're female.
 
 + i (am from|live in) *
-- <set location={formal}<star2>{/formal}>I've spoken to people from <get location> before.
+- <set location={formal}<star2>{/formal}>I've spoken to people from <get location> before. <call>storeLocation "<bot name>" "<get location>"</call>
 
 + my favorite * is *
 - <set fav<star1>=<star2>>Why is it your favorite?
