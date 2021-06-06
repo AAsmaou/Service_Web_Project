@@ -164,8 +164,30 @@ app.post('/', function (req, res) {
     });
 
   }
+  //*********************************************************
+  //********** LAUNCH BOT ON SLACK ************************
+  //*********************************************************
+  else if (platform == "Slack") {
 
-})
+    tools.findActiveBotName(client, botName, platform).then((val) => {
+      if (val == -1) {
+        tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: brainFile });
+
+        // initialize rivescript bot 
+        bot = new RiveScript();
+        bot.loadFile("brain/" + brainFile).then(launchOnSlack(botName)).catch(error_handler);
+      }
+      else {
+        console.log("Bot already running");
+      }
+      // update interface 
+      res.redirect('http://localhost:' + port);
+    });
+
+  }
+
+});
+
 
 // URL for connecting bot to your server: https://discord.com/api/oauth2/authorize?client_id=850311681304821770&permissions=8&scope=bot
 async function launchOnDiscord(name) {
@@ -202,8 +224,39 @@ async function launchOnDiscord(name) {
   });
 
 
-  // login to Discord with your app's token
-  clientDiscord.login(config.BOT_TOKEN);
+
+// require the slack client
+const Slack = require("slack-client");
+require("babel-polyfill");
+var config = require("./config.json");
+// create a new Slack client
+const clientSlack = new Slack(config.token, true, true);
+
+async function launchOnSlack(name) {
+  
+	clientSlack.on("open", function() {
+		console.log("Welcome to Slack. You are %s of %s",
+			clientSlack.self.name, clientSlack.team.name);
+	});
+
+  clientSlack.on('message', function(data) {
+    // get name of the other username
+    var UserName = data._client.author.username;
+    var UserMsg = data.toJSON;
+
+    //generate reply by bot
+    bot.sortReplies();
+
+    bot.reply(UserName, UserMsg).then(function (reply) {
+      console.log("The bot says: " + reply);	
+      // Send it to the channel.
+      channel = slack.getChannelGroupOrDMByID(messageData.channel);
+      if (reply.length > 0) {
+        channel.send(reply);
+      }
+    });
+  
+  });
 }
 
 
@@ -249,8 +302,31 @@ app.delete('/remove', function (req, res) {
   });
 })
 
+//******************************************/
+//******** DISABLE BOT FROM SLACK *******/ 
+//******************************************/
+app.delete('/remove', function (req, res) {
+  var botName = req.body.BotName;
 
+  tools.findActiveBotName(client, botName, "Slack").then((val) => {
+    if (val != -1) {  // if bot is really running on Slack, then disconnect it
 
+      // disconnect bot
+      if (clientSlack.user.username == botName) {
+
+        slack.on("close", function() {
+          console.warn("Disconnected from Slack.");
+        });
+      }
+
+      tools.UpdateStatus(client, botName, { status: 'off', platform: 'Slack', brains: "null" });
+    }
+    else {
+      console.log("Bot not running on Slack");
+    }
+    res.redirect('http://localhost:' + port);
+  });
+});
 //******************************************/
 //******** UPLOAD NEW BRAIN ***************/ 
 //******************************************/
@@ -278,7 +354,7 @@ app.put('/upload', function (req, res) {
 
     tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: listBrains }); // add new brain in the DBB
 
-  })
+  });
 
   res.redirect('http://localhost:' + port);
-})
+});
