@@ -9,7 +9,6 @@
 ! var master = localuser
 
 // Bot Variables
-! var name     = Steeve
 ! var fullname = Steeve Rive
 ! var age      = 5
 ! var birthday = October 12
@@ -497,6 +496,7 @@ const cursor = await client.db("test").collection("users").find({ bot: botName})
 return firstname;
 
 < object
+
 
 // Learn stuff about our users.
 + what is my name

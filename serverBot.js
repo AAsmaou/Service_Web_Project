@@ -76,6 +76,9 @@ appBot.get('/chatbot', (req, res) => {
 
         });
 
+        // set the name of the bot on Rivescript
+        bot.setVariable("name", robot);
+
       }
       else {
         robot = "noRobot";
@@ -112,7 +115,7 @@ function success_handler() {
       socket.emit('bot message', { botName: 'ERROR', botmessage: "No bots running on the Server at the moment!" });
     }
     else {
-      socket.emit('bot message', { botName: robot, botmessage: "Hello :) How are you going?" });
+      socket.emit('bot message', { botName: robot, botmessage: "Hello :) here it is " + robot });
     }
     // when the client emits 'new message', this listens and executes
     socket.on('new message', (data) => {
@@ -123,7 +126,7 @@ function success_handler() {
 
       //generate reply by bot
       bot.reply(UserName, UserMsg).then(function (reply) {
-        console.log("The bot says: " + reply);
+        //console.log("The bot says: " + reply);
         socket.emit('bot message', { botName: robot, botmessage: reply });
       });
 
