@@ -586,7 +586,7 @@ const botName = arguments[1][0];
 var UserName;
 var location = arguments[1][1];;
 
-// fetch age if it exists
+// fetch location if it exists
 if (location == "undefined"){
 
 const cursor = await client.db("test").collection("users").find({ bot: botName});

@@ -217,6 +217,7 @@ async function launchOnDiscord(name) {
     console.log("Bot ready on Discord");
   });
 
+  
   // read messages sent by the user and reply to them
   clientDiscord.on('message', message => {
 
@@ -297,9 +298,7 @@ app.use(methodOverride('_method', ['PUT']))
 
 app.put('/upload', function (req, res) {
   var botName = req.body.BotName;
-  console.log(botName)
   var platform = req.body.interface;
-  console.log(platform)
   var newBrain = req.body.brain;
 
   var listBrains = []; //array of brains
