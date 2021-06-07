@@ -245,15 +245,15 @@ $(function() {
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', (data) => {
     log(`${data.username} joined`);
-    addParticipantsMessage(data);
+    //addParticipantsMessage(data);
   });
 
-  // Whenever the server emits 'user left', log it in the chat body
+  /*Whenever the server emits 'user left', log it in the chat body
   socket.on('user left', (data) => {
     log(`${data.username} left`);
-    addParticipantsMessage(data);
-    removeChatTyping(data);
-  });
+    //addParticipantsMessage(data);
+    //removeChatTyping(data);
+  });*/
 
   // Whenever the server emits 'typing', show the typing message
   socket.on('typing', (data) => {

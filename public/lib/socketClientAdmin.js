@@ -129,10 +129,15 @@ $(function() {
     log(`${data.username} joined`);
   });
 
-  // Whenever the server emits 'user left', log it in the chat body
+  /* Whenever the server emits 'user left', log it in the chat body
   socket.on('user left', (data) => {
-    log(`${data.username} left`);
-  });
+    if (data.username == "undefined") {
+      log(`Bot left`);
+    }
+    else{
+      log(`${data.username} left`);
+    }
+  });*/
 
   socket.on('disconnect', () => {
     log('you have been disconnected');
