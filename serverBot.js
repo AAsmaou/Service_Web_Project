@@ -52,15 +52,17 @@ var userName;
 //**************************************************/
 
 appBot.get('/chatbot', (req, res) => {
+
   userName = req.query.user;
+  
   if (typeof userName == 'undefined') {
+
     res.redirect('http://localhost:3000'); //redirect to the login page
+
     console.log('Cannot access without loging in first')
   }
   else {
     res.render('chat');
-
-
 
     var brain;
 
@@ -70,7 +72,7 @@ appBot.get('/chatbot', (req, res) => {
 
       if (val != -1) {
 
-        val.forEach((result) => {
+        val.forEach((result) => {   // val actually contains only an instance, since only one bot can run on Browser at a time
 
           robot = result.name;
           brain = result.brains;
@@ -134,7 +136,7 @@ function success_handler() {
 
       //generate reply by bot
       bot.reply(UserName, UserMsg).then(function (reply) {
-        
+
         //console.log("The bot says: " + reply);
         socket.emit('bot message', { botName: robot, botmessage: reply });
 
@@ -192,8 +194,10 @@ function success_handler() {
 
 
 //******************************************/
-//************ UPDATE BRAINS ***************/ 
+//************ UPDATE BRAINS ***************/
 //******************************************/
+
+// it updates the brains if some changes in the bots collection happened.
 
 async function updateBrain(botname, platform) {
 
@@ -224,7 +228,7 @@ async function updateBrain(botname, platform) {
 
 
 //*****************************************************************/
-//************ UTILITIES FOR LOADING OF THE BRAINS ***************/ 
+//************ UTILITIES FOR LOADING OF THE BRAINS ***************/
 //****************************************************************/
 
 function BrainUploadSuccess(file) {

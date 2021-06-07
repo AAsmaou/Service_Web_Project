@@ -101,9 +101,9 @@ app.post('/', function (req, res) {
   var platform = req.body.interface;
   var brainFile = req.body.brain;
 
-  //********************************
-  //********** BROWSER *************
-  //********************************
+  //***********************************************
+  //**************** BROWSER **********************
+  //***********************************************
   // Launch bot on the browser. 
   //We set up the bot as launched on the database. The bot is launched in the serverBot.js after checking it has been initialized as launched on the database
 
