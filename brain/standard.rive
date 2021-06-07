@@ -193,7 +193,7 @@
 
 // macro for storing stuff about users in the database
 
-> object storeFirsName javascript
+> object storeFirstName javascript
 
 const {MongoClient} = require('mongodb');
 const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -498,15 +498,151 @@ return firstname;
 < object
 
 
+> object findAge javascript
+
+const {MongoClient} = require('mongodb');
+const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {useUnifiedTopology: true});
+
+const botName = arguments[1][0];
+
+ 
+// Connect to the MongoDB cluster
+  try {
+    
+    await client.connect();
+
+    console.log("DATABASE CONNECTED SUCCESSFULLY");
+
+  } catch (e) {
+    console.error(e);
+  }
+
+
+// fetch name uf user speaking with this bot
+var UserName;
+var age = arguments[1][1];;
+
+// fetch age if it exists
+if (age == "undefined"){
+
+const cursor = await client.db("test").collection("users").find({ bot: botName});
+
+  var user = await cursor.toArray();
+
+  if (user.length > 0) {
+
+	UserName = user[0].username;
+	age = user[0].age;
+
+    console.log(UserName + ` is ` + age + "years old");
+
+  } else {
+
+    console.log(`No users are speaking with ` + botName);
+    user = -1;
+	  age = "undefined";
+
+  }
+  
+}
+
+  try {
+    // Close connection to the MongoDB cluster
+    await client.close();
+
+    console.log("DATABASE CONNECTION CLOSE SUCCESSFULLY");
+
+  } catch (e) {
+    console.error(e);
+  }
+
+return age;
+
+< object
+
+> object findLocation javascript
+
+const {MongoClient} = require('mongodb');
+const uri = "mongodb+srv://gas:WebProject@cluster0.gsyew.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {useUnifiedTopology: true});
+
+const botName = arguments[1][0];
+
+ 
+// Connect to the MongoDB cluster
+  try {
+    
+    await client.connect();
+
+    console.log("DATABASE CONNECTED SUCCESSFULLY");
+
+  } catch (e) {
+    console.error(e);
+  }
+
+
+// fetch name uf user speaking with this bot
+var UserName;
+var location = arguments[1][1];;
+
+// fetch age if it exists
+if (location == "undefined"){
+
+const cursor = await client.db("test").collection("users").find({ bot: botName});
+
+  var user = await cursor.toArray();
+
+  if (user.length > 0) {
+
+	UserName = user[0].username;
+	location = user[0].location;
+
+    console.log(UserName + ` is from ` + location);
+
+  } else {
+
+    console.log(`No users are speaking with ` + botName);
+    user = -1;
+	  location = "undefined";
+
+  }
+  
+}
+
+  try {
+    // Close connection to the MongoDB cluster
+    await client.close();
+
+    console.log("DATABASE CONNECTION CLOSE SUCCESSFULLY");
+
+  } catch (e) {
+    console.error(e);
+  }
+
+return location;
+
+< object
+
+
 // Learn stuff about our users.
 + what is my name
 * <call> findFirstname "<bot name>" "<get name>"</call> == undefined => You never told me your name.
 - You are <call> findFirstname  "<bot name>" "<get name>"</call>.
 
 
++ (how old am i|do you know how old i am|do you know my age){weight=10}
+* <call> findAge "<bot name>" "<get age>"</call> == undefined => You never told me your age.
+- You are <call> findAge  "<bot name>" "<get age>"</call> years old.
+
+
++ where am i from
+* <call> findLocation "<bot name>" "<get location>"</call> == undefined => You never told me where you come from.
+- You are from <call> findLocation  "<bot name>" "<get location>"</call>.
+
 + my name is *
-- <set name=<formal>>Nice to meet you, <get name> <call>storeFirsName "<bot name>" "<get name>"</call>
-- <set name=<formal>><get name>, nice to meet you. <call>storeFirsName "<bot name>" "<get name>"</call>
+- <set name=<formal>>Nice to meet you, <get name> <call>storeFirstName "<bot name>" "<get name>"</call>
+- <set name=<formal>><get name>, nice to meet you. <call>storeFirstName "<bot name>" "<get name>"</call>
 
 + my name is <bot master>
 - <set name=<bot master>>That's my master's name too.
@@ -519,8 +655,8 @@ return firstname;
 - <set nickname=<formal>><get nickname>, I will call you that from now on. <call>storeNickname "<bot name>" "<get nickname>"</call>
 
 + i am * years old
-- <set age=<star>>A lot of people are <get age>, you're not alone. <call>storeFirsName "<bot name>" "<get age>"</call>
-- <set age=<star>>Cool, I'm <bot age> myself. <call>storeFirsName "<bot name>" "<get age>"</call> {weight=49} 
+- <set age=<star>>A lot of people are <get age>, you're not alone. <call>storeAge "<bot name>" "<get age>"</call>
+- <set age=<star>>Cool, I'm <bot age> myself. <call>storeAge "<bot name>" "<get age>"</call> {weight=49} 
 
 + i am a (@malenoun)
 - <set sex=male>Alright, you're a <star>.
@@ -554,10 +690,6 @@ return firstname;
 + my (girlfriend|boyfriend)* name is *
 - <set spouse=<formal>>That's a nice name.
 
-
-+ (how old am i|do you know how old i am|do you know my age){weight=10}
-- You are <get age> years old.
-- You're <get age>.
 
 + am i a (@malenoun) or a (@femalenoun){weight=10}
 - You're a <get sex>.

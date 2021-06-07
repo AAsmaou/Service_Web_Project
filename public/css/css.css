@@ -214,7 +214,7 @@ h1, .h1 {
   position: relative;
   margin-left: auto;
   margin-right: auto;
-  width: 55%;
+  width: 22%;
   background-color: #242526;
   border-radius: 10px;
   margin-bottom: 100px;
@@ -302,6 +302,7 @@ input:focus{
 
 .margin-top{
   margin-top: 8px;
+  display: grid;
 }
 
 .green{

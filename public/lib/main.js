@@ -16,9 +16,6 @@ $(function() {
   const $messages = $('.messages');           // Messages area
   const $inputMessage = $('.inputMessage');   // Input message input box
 
-  const $loginPage = $('.login.page');        // The login page
-  const $chatPage = $('.chat.page');          // The chatroom page
-
   const socket = io();
 
   // Prompt for setting a username

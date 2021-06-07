@@ -1,6 +1,9 @@
 console.log("Server inialization... ");
 
-//CREATE THE EXPRESS APP
+//**************************************************/
+//************ INITIALIZE APP **********************/ 
+//**************************************************/
+
 const express = require('express')
 const app = express()
 const port = 3000
@@ -13,7 +16,16 @@ app.use(express.static("public"));
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-// DATABASE UTILITIES
+//LISTEN PORT
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`)
+})
+
+
+//**************************************************/
+//************ DATABASE CONNECTION ****************/ 
+//**************************************************/
+
 var tools = require('./model/DatabaseUtility');
 
 // establish database connection
@@ -25,11 +37,18 @@ tools.DatabaseConnectionOpen(client).catch(console.error);
 var User = [];
 
 
-// WELCOME PAGE
+//**********************************/
+//************ GET ****************/ 
+//*********************************/
+
 app.get('/', (req, res) => {
   res.render('login');
 })
 
+
+//**********************************/
+//************ POST ****************/ 
+//**********************************/
 
 app.post('/', function (req, res) {
   //retrieve value from the form
@@ -47,9 +66,4 @@ app.post('/', function (req, res) {
     var user = encodeURIComponent(nickname);
     res.redirect('http://localhost:3002/chatbot'+'?user=' + user);
   }
-})
-
-//LISTEN PORT
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`)
 })

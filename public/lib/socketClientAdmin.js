@@ -1,6 +1,5 @@
 $(function() {
   const FADE_TIME = 150; // ms
-  const TYPING_TIMER_LENGTH = 400; // ms
   const COLORS = [
     '#e21400', '#91580f', '#f8a700', '#f78b00',
     '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
@@ -8,17 +7,11 @@ $(function() {
   ];
 
   // Initialize variables
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-
-  const $window = $(window);
-  const $usernameInput = $('.usernameInput'); // Input for username
   const $messages = $('.messages');           // Messages area
-  const $inputMessage = $('.inputMessage');   // Input message input box
 
   const portBot = 3002;
 
-  const socket = io("http://localhost:3002");
+  const socket = io("http://localhost:" + portBot);
 
   // Prompt for setting a username
   let username;

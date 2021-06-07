@@ -121,7 +121,7 @@ app.post('/', function (req, res) {
 
             const LastRunningBot = botsOnThePlatform[0].name;
 
-            tools.UpdateStatus(client, LastRunningBot, { status: 'off', platform: 'None', brains: 'null'});
+            tools.UpdateStatus(client, LastRunningBot, { status: 'off', platform: 'None', brains: 'null' });
           }
 
           // set new bot as launched
@@ -165,7 +165,42 @@ app.post('/', function (req, res) {
 
   }
 
+
+  /*********************************************************
+  //********** LAUNCH BOT ON SLACK  ************************
+  //*********************************************************
+
+  else if (platform == "Slack") {
+
+    //const config = require("./config.json");
+
+    // Read a token from the environment variables
+    //const token = config.BOT_SLACK_TOLEN;
+
+    // Initialize
+
+    tools.findActiveBotName(client, botName, platform).then((val) => {
+      if (val == -1) {
+        tools.UpdateStatus(client, botName, { status: 'on', platform: platform, brains: brainFile });
+
+        // initialize rivescript bot 
+        bot = new RiveScript();
+        bot.loadFile("brain/" + brainFile).then(launchOnSlack(botName)).catch(error_handler);
+      }
+      else {
+        console.log("Bot already running");
+      }
+      // update interface 
+      res.redirect('http://localhost:' + port);
+    });
+  } */
+
 })
+
+
+//******************************************************************************
+//********** Function for launching the bot on DIscord  ************************
+//******************************************************************************
 
 // URL for connecting bot to your server: https://discord.com/api/oauth2/authorize?client_id=850311681304821770&permissions=8&scope=bot
 async function launchOnDiscord(name) {
@@ -226,7 +261,7 @@ app.use(methodOverride('_method', ['DELETE']))
 
 
 app.delete('/remove', function (req, res) {
-  
+
   var botName = req.body.BotName;
 
   tools.findActiveBotName(client, botName, "Discord").then((val) => {
@@ -282,3 +317,40 @@ app.put('/upload', function (req, res) {
 
   res.redirect('http://localhost:' + port);
 })
+
+
+/******************************************************************************************************
+//********** Function for launching the bot on Slack  ( NOT USED BUT WORKING ) ************************
+//*****************************************************************************************************
+
+//URL for connecting to our teams https://join.slack.com/t/newworkspace-4hd9708/shared_invite/zt-rad6a6vp-~CHpY8RVqVMv4K~vDqI_3w
+
+// The following function is able to send a message on a channel where the bot is joining.
+// TO DO: implement a websocket for receiving the messages from the user and read them. 
+
+async function launchOnSlack(name) {
+
+  const { WebClient } = require('@slack/web-api');
+
+  const config = require("./config.json");
+
+  // An access token (from your Slack app or custom integration - xoxp, xoxb)
+  const token = config.SLACK_TOKEN;
+
+  const web = new WebClient(token);
+
+  // This argument can be a channel ID, a DM ID, a MPDM ID, or a group ID
+  // C024XELDGD6 = " # bot" channel
+  const conversationId = 'C024XELDGD6';
+
+  
+  (async () => {
+    // See: https://api.slack.com/methods/chat.postMessage
+    const res = await web.chat.postMessage({ channel: conversationId, text: 'Hello there' });
+    
+
+    // `res` contains information about the posted message
+    //console.log('Message sent: ', res.ts);
+
+  })();
+} */
