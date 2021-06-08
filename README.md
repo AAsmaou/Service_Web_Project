@@ -12,7 +12,7 @@ The project consists of web-app which is composed of two interfaces:
 		- See the status of all the bots
 		- Follow the conversation the bot is having with the user
 
-	2. CHATROOM: is the page where the chat is helding. 
+	2. CHATROOM: is the page where the chat is held. 
 	
 
 
