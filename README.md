@@ -35,7 +35,7 @@ The project consists of web-app which is composed of two interfaces:
 
 2. _MongoDb_ for implementing the mongoDB database.
 
-3. _Discord.js _for interfacing with Discord API.
+3. _Discord.js_ for interfacing with Discord API.
 
 4. _Rivescript_ for emulating the bot.
 
